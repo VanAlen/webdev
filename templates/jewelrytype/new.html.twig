@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Jewelry Type{% endblock %}
+
+{% block body %}
+<div class="min-h-screen p-6" style="background-color: #0a1f0a;">
+    <div class="max-w-md mx-auto">
+        <div class="glass-card p-6">
+            <h1 class="text-xl text-white mb-4">Add New Jewelry Type</h1>
+            
+            <form method="post">
+                <label class="text-white/60 text-sm block mb-2">Name</label>
+                <input type="text" name="name" class="form-input w-full mb-4" required>
+                
+                <div class="flex gap-3">
+                    <button type="submit" class="px-4 py-2 bg-white/20 rounded-lg text-white hover:bg-white/30">Save</button>
+                    <a href="{{ path('app_jewelrytype_index') }}" class="px-4 py-2 bg-white/10 rounded-lg text-white/70 hover:bg-white/20">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-input {
+        width: 100%;
+        padding: 0.6rem 0.875rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 0.75rem;
+        color: white;
+    }
+    .glass-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 1.5rem;
+    }
+</style>
+{% endblock %}

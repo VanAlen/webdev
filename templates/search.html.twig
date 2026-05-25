@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<section class="py-24 px-8">
+  <h1 class="text-4xl font-bold mb-6 text-[#014421]">Search Jewelry</h1>
+
+  {{ form_start(form, { method: 'GET', action: path('search_gems') }) }}
+  <div class="space-y-6 max-w-lg mx-auto">
+    {{ form_row(form.gemtype) }}
+    {{ form_row(form.jewelrytype) }}
+
+    <label for="price" class="block text-lg font-semibold text-[#014421] mb-2">Price Range</label>
+    <select id="price" name="price" class="w-full px-4 py-3 rounded-md border border-gray-300">
+      <option value="" {% if app.request.get('price') == '' %}selected{% endif %}>Select range</option>
+      <option value="under-100" {% if app.request.get('price') == 'under-100' %}selected{% endif %}>Under $100</option>
+      <option value="100-500" {% if app.request.get('price') == '100-500' %}selected{% endif %}>$100–$500</option>
+      <option value="500-1000" {% if app.request.get('price') == '500-1000' %}selected{% endif %}>$500–$1000</option>
+      <option value="above-1000" {% if app.request.get('price') == 'above-1000' %}selected{% endif %}>Above $1000</option>
+    </select>
+
+    <button type="submit"
+      class="w-full px-8 py-4 font-semibold rounded-md shadow-lg hover:scale-105 transition-transform"
+      style="background-color:#014421; color:#FAF3A0;">
+      Search Gems
+    </button>
+  </div>
+  {{ form_end(form) }}
+
+  {% if results is defined %}
+    <div class="mt-12">
+      {% if results|length > 0 %}
+        <h2 class="text-2xl font-bold mb-4 text-[#014421]">Matching Jewelry</h2>
+        <ul class="space-y-4">
+          {% for item in results %}
+            <li class="border p-4 rounded shadow">
+              <strong>{{ item.name }}</strong><br>
+              Price: ${{ item.price }}<br>
+              Type: {{ item.jewelrytype.name }}<br>
+              Gem: {{ item.gemtype.name }}<br>
+              <a href="{{ path('app_jewelries_show', { id: item.id }) }}" class="text-[#014421] underline">View Details</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-red-600 mt-4">No matching jewelry found.</p>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

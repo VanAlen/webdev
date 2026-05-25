@@ -1,0 +1,314 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Gem{% endblock %}
+
+{% block body %}
+<style>
+    .form-input {
+        width: 100%;
+        padding: 0.6rem 0.875rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 0.75rem;
+        color: white;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+    }
+    .form-input:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+    }
+    .form-input option { background: #0a1f0a; }
+    .form-label {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 0.35rem;
+    }
+    textarea.form-input { resize: vertical; min-height: 80px; }
+    .section-divider {
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(255, 255, 255, 0.25);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 0.4rem;
+        margin-bottom: 0.75rem;
+    }
+
+
+    .form-input::-webkit-file-upload-button {
+        color: white;
+        background: rgba(255,255,255,0.1);
+        border-radius: 0.5rem;
+       
+        cursor: pointer;
+        
+    }
+
+    .form-input::file-selector-button {
+        color: white;
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 0.5rem;
+        
+        cursor: pointer; 
+    }
+    input[type="file"] {
+    color: transparent;
+    width: 100%;
+}
+.text-white\/30 {
+    color: rgba(255, 245, 245, 0.3) !important;
+}
+/* Make ALL text white */
+body, div, p, span, label, h1, h2, h3, h4, h5, h6, 
+.text-white\/30, .text-white\/40, .text-white\/50, 
+.text-white\/60, .text-white\/70, .text-white\/80,
+.text-white\/90 {
+    color: white !important;
+}
+
+</style>
+
+<div class="min-h-screen p-6" style="background-color: #0a1f0a;">
+    <div class="max-w-6xl mx-auto">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-light text-white">Edit Gem</h1>
+                <p class="text-xs text-white/40 mt-0.5">ID: {{ gem.id }}</p>
+            </div>
+            <a href="{{ path('app_gem_index') }}" class="px-4 py-2 bg-white/10 rounded-xl text-sm text-white hover:bg-white/20 transition border border-white/20 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Back to List
+            </a>
+        </div>
+
+        <!-- Flash Messages -->
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-4 px-4 py-3 rounded-xl {{ label == 'success' ? 'bg-green-500/20 border border-green-500/30 text-green-300' : 'bg-red-500/20 border border-red-500/30 text-red-300' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <!-- Main Card -->
+        <div style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1.5rem;">
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <!-- LEFT: Image Panel -->
+                <div style="border-right: 1px solid rgba(255,255,255,0.08); padding-right: 1.5rem;">
+                    <p class="section-divider">Preview</p>
+
+                    <div class="rounded-xl overflow-hidden" style="background: rgba(255,255,255,0.05); aspect-ratio: 1;">
+                        {% if gem.imagepath %}
+                        
+                            <img id="image-preview" src="/images/gems/{{ gem.imagepath }}"
+                                 alt="{{ gem.description }}"
+                                 class="w-full h-full object-cover">
+                        {% else %}
+                            <div id="image-placeholder" class="w-full h-full flex items-center justify-center">
+                                <svg class="w-12 h-12 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <img id="image-preview" src="" alt="" class="w-full h-full object-cover hidden">
+                        {% endif %}
+                    </div>
+                    <p class="text-xs text-white/30 text-center mt-2">
+                        {{ gem.imagepath ? 'Current image' : 'No image uploaded' }}
+                    </p>
+
+<!-- Quick Info - Simple List -->
+<div class="mt-4 space-y-2">
+    <div class="flex justify-between items-center py-1 border-b border-white/5">
+        <span class="text-xs text-white/40">Type</span>
+        <span class="text-white text-sm">{{ gem.gemtype ? gem.gemtype.name : '—' }}</span>
+    </div>
+    <div class="flex justify-between items-center py-1 border-b border-white/5">
+        <span class="text-xs text-white/40">Origin</span>
+        <span class="text-white text-sm">{{ gem.origin ?: '—' }}</span>
+    </div>
+    <div class="flex justify-between items-center py-1 border-b border-white/5">
+        <span class="text-xs text-white/40">Price</span>
+        <span class="text-white text-sm">${{ gem.price ?: '—' }}</span>
+    </div>
+    <div class="flex justify-between items-center py-1 border-b border-white/5">
+        <span class="text-xs text-white/40">Stock</span>
+        <span class="text-white text-sm">{{ gem.stock ?: '—' }}</span>
+    </div>
+</div>
+                </div>
+
+                <!-- RIGHT: Form -->
+                <div class="md:col-span-2">
+                    {{ form_start(form, {
+                        'attr': {
+                            'enctype': 'multipart/form-data',
+                            'novalidate': 'novalidate'
+                        }
+                    }) }}
+
+                    {{ form_errors(form) }}
+
+                    <!-- Identity -->
+                    <p class="section-divider">Identity</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
+                        {{ form_row(form.gemtype, {
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-input'}
+                        }) }}
+                        {{ form_row(form.origin, {
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-input'}
+                        }) }}
+                    </div>
+
+                    <!-- Grading -->
+                    <p class="section-divider">Grading</p>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
+                        {{ form_row(form.carat, {
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-input'}
+                        }) }}
+                        {{ form_row(form.size, {
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-input'}
+                        }) }}
+                        {{ form_row(form.cut, {
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-input'}
+                        }) }}
+                        {{ form_row(form.color, {
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-input'}
+                        }) }}
+                        {{ form_row(form.clarity, {
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-input'}
+                        }) }}
+                    </div>
+
+                    <!-- Commerce -->
+                    <p class="section-divider">Commerce</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
+                        {{ form_row(form.price, {
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-input', 'step': '0.01'}
+                        }) }}
+                        {{ form_row(form.stock, {
+                            'label_attr': {'class': 'form-label'},
+                            'attr': {'class': 'form-input'}
+                        }) }}
+                        <div>
+                            {{ form_label(form.imagepath, 'Image', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.imagepath, {'attr': {'class': 'form-input', 'accept': 'image/*', 'id': 'image-upload'}}) }}
+                            {{ form_errors(form.imagepath) }}
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="section-divider">Description</p>
+                    {{ form_row(form.description, {
+                        'label_attr': {'class': 'form-label'},
+                        'attr': {'class': 'form-input', 'rows': '3'}
+                    }) }}
+
+                    {{ form_rest(form) }}
+
+                    <!-- Actions -->
+                    <div class="flex gap-2 justify-between pt-4 mt-4" style="border-top: 1px solid rgba(255,255,255,0.08);">
+                        <button type="button" onclick="document.getElementById('delete-modal').classList.remove('hidden')"
+                            class="px-4 py-2 bg-red-500/20 border border-red-500/30 rounded-lg text-sm text-red-300 hover:bg-red-500/30 transition flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                            Delete
+                        </button>
+                        <div class="flex gap-3">
+                            <a href="{{ path('app_gem_index') }}" class="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-sm text-white/70 hover:bg-white/20 transition">
+                                Cancel
+                            </a>
+                            <button type="submit" class="px-4 py-2 bg-white/20 rounded-lg text-sm text-white hover:bg-white/30 transition flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div id="delete-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center" style="background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);">
+    <div style="background: #0a1f0a; border: 1px solid rgba(255,255,255,0.15); border-radius: 1rem; padding: 1.5rem; width: 100%; max-width: 380px;">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-red-500/20 border border-red-500/30">
+                <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                </svg>
+            </div>
+            <div>
+                <p class="text-white font-medium">Delete Gem?</p>
+                <p class="text-white/40 text-xs">ID: {{ gem.id }}</p>
+            </div>
+        </div>
+        <p class="text-white/50 text-sm mb-4 leading-relaxed">
+            This will permanently delete the gem and all associated data. This action cannot be undone.
+        </p>
+        <div class="flex gap-3 justify-end">
+            <button type="button" onclick="document.getElementById('delete-modal').classList.add('hidden')"
+                class="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-sm text-white/70 hover:bg-white/20 transition">
+                Cancel
+            </button>
+            <form method="post" action="{{ path('app_gem_delete', {'id': gem.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ gem.id) }}">
+                <button type="submit" class="px-4 py-2 bg-red-500/30 border border-red-500/40 rounded-lg text-sm text-red-300 hover:bg-red-500/40 transition">
+                    Yes, Delete
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Live Image Preview Script -->
+<script>
+    const upload = document.getElementById('image-upload');
+    const preview = document.getElementById('image-preview');
+    const placeholder = document.getElementById('image-placeholder');
+
+    if (upload) {
+        upload.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    if (placeholder) {
+                        placeholder.classList.add('hidden');
+                    }
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+</script>
+{% endblock %}

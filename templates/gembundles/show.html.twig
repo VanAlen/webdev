@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gem Bundle Details{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gray-50 py-20">
+  <div class="container mx-auto px-4">
+    <h1 class="text-3xl font-bold mb-8 text-gray-800">Gem Bundle Details</h1>
+
+        <div class="bg-white shadow-md rounded-lg p-6 flex flex-col md:flex-row md:space-x-10">
+        <!-- Image on the left -->
+        <div class="md:w-1/3 flex justify-center items-start mb-6 md:mb-0 text-forest">
+            {% if gembundle.image %}
+            <img src="{{ asset(gembundle.image) }}"
+                alt="{{ gembundle.name }}"
+                class="w-[900px] h-auto object-cover rounded-lg shadow-md">
+            {% else %}
+            <img src="{{ asset('images/default-bundle.webp') }}"
+                alt="No image"
+                class="w-[100px] h-auto object-cover rounded-lg shadow-md opacity-50">
+            {% endif %}
+        </div>
+
+        <!-- Details on the right -->
+        <div class="md:w-2/3 text-forest">
+            <table class="w-full text-left text-gray-700 text-forest">
+            <tbody>
+                {% for label, value in {
+                'ID': gembundle.id,
+                'Name': gembundle.name,
+                'Description': gembundle.description,
+                'Price': gembundle.price,
+                'Stock': gembundle.stock,
+                'Created At': gembundle.createdAt|date('Y-m-d H:i')
+                } %}
+                <tr class="border-b text-forest">
+                    <th class="py-3 px-4 text-gray-500 font-medium w-1/3">{{ label }}</th>
+                    <td class="py-3 px-4">{{ value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+
+            <div class="mt-6 flex space-x-4">
+            <a href="{{ path('app_gembundles_index') }}" class="px-5 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Back to list</a>
+            <a href="{{ path('app_gembundles_edit', {'id': gembundle.id}) }}" class="px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Edit</a>
+            <form method="post" action="{{ path('app_gembundles_delete', {'id': gembundle.id}) }}" onsubmit="return confirm('Are you sure?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ gembundle.id) }}">
+                <button type="submit" class="px-5 py-2 bg-red-600 text-white rounded hover:bg-red-700">Delete</button>
+            </form>
+            </div>
+        </div>
+        </div>
+
+  </div>
+</div>
+{% endblock %}

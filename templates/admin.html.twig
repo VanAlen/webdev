@@ -1,0 +1,209 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block body %}
+<style>
+    .stat-card {
+        transition: all 0.2s ease;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .stat-card:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.12);
+    }
+    .action-card {
+        transition: all 0.2s ease;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .action-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    .progress-bar-bg {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    .icon-white {
+        filter: brightness(0) invert(1);
+    }
+</style>
+
+<div class="min-h-screen p-6" style="background-color: #0a1f0a;">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-semibold text-white">Dashboard</h1>
+                <p class="text-sm text-white/60 mt-1">Welcome back, {{ app.user.username }}</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xs text-white/60">{{ "now"|date("F j, Y") }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <!-- Total Users -->
+        <div class="rounded-xl p-5 stat-card">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-medium text-white/60 uppercase tracking-wider">Total Users</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ userCount }}</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                    <img src="/images/svg/user.svg" class="w-5 h-5 icon-white" alt="Users">
+                </div>
+            </div>
+            <div class="mt-3">
+                <span class="text-xs text-white/60">{{ staffCount }} staff members</span>
+            </div>
+        </div>
+
+        <!-- Total Products -->
+        <div class="rounded-xl p-5 stat-card">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-medium text-white/60 uppercase tracking-wider">Total Products</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ totalRecords }}</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                    <img src="/images/svg/gem.svg" class="w-5 h-5 icon-white" alt="Products">
+                </div>
+            </div>
+            <div class="mt-3">
+                <span class="text-xs text-white/60">{{ gemCount }} gems · {{ jewelryCount }} jewelries</span>
+            </div>
+        </div>
+
+        <!-- Activities -->
+        <div class="rounded-xl p-5 stat-card">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-medium text-white/60 uppercase tracking-wider">Activities</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ activityCount }}</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                    <img src="/images/svg/activity_2.svg" class="w-5 h-5 icon-white" alt="Activities">
+                </div>
+            </div>
+            <div class="mt-3">
+                <span class="text-xs text-white/60">System logs</span>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="rounded-xl p-5 stat-card">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-medium text-white/60 uppercase tracking-wider">Categories</p>
+                    <p class="text-3xl font-bold text-white mt-1">4</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                    <img src="/images/svg/category.svg" class="w-5 h-5 icon-white" alt="Categories">
+                </div>
+            </div>
+            <div class="mt-3">
+                <span class="text-xs text-white/60">Gems · Jewelries · Bundles · Custom</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Breakdown -->
+    <div class="rounded-xl border border-white/10 mb-8" style="background: rgba(255, 255, 255, 0.05);">
+        <div class="px-6 py-4 border-b border-white/10">
+            <div class="flex items-center gap-2">
+                <img src="/images/svg/bar-chart.svg" class="w-4 h-4 icon-white" alt="Chart">
+                <h3 class="text-sm font-semibold text-white">Product Breakdown</h3>
+            </div>
+            <p class="text-xs text-white/60 mt-0.5 ml-6">Distribution across categories</p>
+        </div>
+        <div class="p-6">
+            <div class="space-y-4">
+                <!-- Gems Bar -->
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-white">Gems</span>
+                        <span class="font-medium text-white">{{ gemCount }}</span>
+                    </div>
+                    <div class="w-full progress-bar-bg rounded-full h-1.5">
+                        <div class="bg-white h-1.5 rounded-full" style="width: {{ totalRecords > 0 ? (gemCount / totalRecords * 100)|round : 0 }}%"></div>
+                    </div>
+                </div>
+                <!-- Jewelries Bar -->
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-white">Jewelries</span>
+                        <span class="font-medium text-white">{{ jewelryCount }}</span>
+                    </div>
+                    <div class="w-full progress-bar-bg rounded-full h-1.5">
+                        <div class="bg-white/80 h-1.5 rounded-full" style="width: {{ totalRecords > 0 ? (jewelryCount / totalRecords * 100)|round : 0 }}%"></div>
+                    </div>
+                </div>
+                <!-- Gembundles Bar -->
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-white">Gembundles</span>
+                        <span class="font-medium text-white">{{ bundleCount }}</span>
+                    </div>
+                    <div class="w-full progress-bar-bg rounded-full h-1.5">
+                        <div class="bg-white/60 h-1.5 rounded-full" style="width: {{ totalRecords > 0 ? (bundleCount / totalRecords * 100)|round : 0 }}%"></div>
+                    </div>
+                </div>
+                <!-- Custom Jewelries Bar -->
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-white">Custom Jewelries</span>
+                        <span class="font-medium text-white">{{ customCount }}</span>
+                    </div>
+                    <div class="w-full progress-bar-bg rounded-full h-1.5">
+                        <div class="bg-white/40 h-1.5 rounded-full" style="width: {{ totalRecords > 0 ? (customCount / totalRecords * 100)|round : 0 }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <a href="{{ path('app_gem_index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl action-card transition group">
+            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                <img src="/images/svg/gem.svg" class="w-4 h-4 icon-white" alt="Gems">
+            </div>
+            <div>
+                <p class="text-sm font-medium text-white">Manage Gems</p>
+                <p class="text-xs text-white/60">{{ gemCount }} items</p>
+            </div>
+        </a>
+        <a href="{{ path('app_jewelries_index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl action-card transition group">
+            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                <img src="/images/svg/jewelry.svg" class="w-4 h-4 icon-white" alt="Jewelries">
+            </div>
+            <div>
+                <p class="text-sm font-medium text-white">Manage Jewelries</p>
+                <p class="text-xs text-white/60">{{ jewelryCount }} items</p>
+            </div>
+        </a>
+        <a href="{{ path('app_gembundles_index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl action-card transition group">
+            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                <img src="/images/svg/bundle.svg" class="w-4 h-4 icon-white" alt="Bundles">
+            </div>
+            <div>
+                <p class="text-sm font-medium text-white">Manage Bundles</p>
+                <p class="text-xs text-white/60">{{ bundleCount }} bundles</p>
+            </div>
+        </a>
+        <a href="{{ path('app_user_index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl action-card transition group">
+            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                <img src="/images/svg/user.svg" class="w-4 h-4 icon-white" alt="Users">
+            </div>
+            <div>
+                <p class="text-sm font-medium text-white">Manage Users</p>
+                <p class="text-xs text-white/60">{{ userCount }} accounts</p>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
+final class Version20251211064111 extends AbstractMigration
+{
+    public function getDescription(): string
+    {
+        return '';
+    }
+
+    public function up(Schema $schema): void
+    {
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('ALTER TABLE customjewelries ADD gemtype_id_id INT DEFAULT NULL, DROP gemtype, DROP jewelrytype');
+        $this->addSql('ALTER TABLE customjewelries ADD CONSTRAINT FK_6DFDE93C5872B75 FOREIGN KEY (gemtype_id_id) REFERENCES gemtype (id)');
+        $this->addSql('CREATE INDEX IDX_6DFDE93C5872B75 ON customjewelries (gemtype_id_id)');
+    }
+
+    public function down(Schema $schema): void
+    {
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql('ALTER TABLE customjewelries DROP FOREIGN KEY FK_6DFDE93C5872B75');
+        $this->addSql('DROP INDEX IDX_6DFDE93C5872B75 ON customjewelries');
+        $this->addSql('ALTER TABLE customjewelries ADD gemtype VARCHAR(255) NOT NULL, ADD jewelrytype VARCHAR(255) NOT NULL, DROP gemtype_id_id');
+    }
+}

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Gem Type{% endblock %}
+
+{% block body %}
+<style>
+    .form-input {
+        width: 100%;
+        padding: 0.6rem 0.875rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 0.75rem;
+        color: white;
+    }
+    .glass-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 1.5rem;
+    }
+</style>
+
+<div class="min-h-screen p-6" style="background-color: #0a1f0a;">
+    <div class="max-w-md mx-auto">
+        <div class="glass-card">
+            <h1 class="text-xl text-white mb-4">Add New Gem Type</h1>
+            
+            {{ form_start(form) }}
+                {{ form_row(form.name, {
+                    'label_attr': {'class': 'text-white/60 text-sm block mb-2'},
+                    'attr': {'class': 'form-input mb-4'}
+                }) }}
+                
+                <div class="flex gap-3">
+                    <button type="submit" class="px-4 py-2 bg-white/20 rounded-lg text-white hover:bg-white/30">Save</button>
+                    <a href="{{ path('app_gemtype_index') }}" class="px-4 py-2 bg-white/10 rounded-lg text-white/70 hover:bg-white/20">Cancel</a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

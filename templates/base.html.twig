@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/images/icon/crystal1.ico" type="image/x-icon">
+  <title>{% block title %}Welcome!{% endblock %}</title>
+  
+  {# Use the newly built CSS file #}
+  <link rel="stylesheet" href="/build/app.css">
+  
+  {# Your custom CSS #}
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <style>
+    .icon-white {
+      filter: brightness(0) invert(1);
+    }
+  </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+<div class="flex flex-1 overflow-hidden">
+  <aside class="w-64 flex-shrink-0 px-8 py-4 text-cream" style="background-color: #014421;">
+    <a href="{{ path('app_admin_index') }}">
+      <img src="/images/gemtitle-w.webp" alt="Gemz Logo" style="width: 150px; height: auto; margin-bottom: 30px;">
+    </a>
+
+    <nav class="space-y-6">
+      {% if app.user %}
+        {# Profile section at top #}
+        <a href="{{ path('app_profile') }}" class="mb-6 pb-4 border-b border-cream/20 block hover:opacity-80 transition">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-full bg-cream/20 flex items-center justify-center">
+              <img src="/images/svg/account.svg" class="w-6 h-6 icon-white" alt="Profile">
+            </div>
+            <div>
+              <p class="font-semibold text-sm">{{ app.user.username }}</p>
+              {% if is_granted('ROLE_ADMIN') %}
+                <span class="text-xs bg-yellow-500/20 px-1 rounded">Admin</span>
+              {% elseif is_granted('ROLE_STAFF') %}
+                <span class="text-xs bg-blue-500/20 px-1 rounded">Staff</span>
+              {% else %}
+                <span class="text-xs bg-green-500/20 px-1 rounded">User</span>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+
+        {% if is_granted('ROLE_ADMIN') %}
+          <a href="{{ path('app_admin_index') }}" class="hover:underline flex items-center space-x-1 text-lg">
+            <img src="/images/svg/dashboard.svg" class="w-6 h-6 icon-white" alt="Dashboard">
+            <span class="text-cream">Admin Dashboard</span>
+          </a>
+        {% endif %}
+
+        {% if is_granted('ROLE_STAFF') or is_granted('ROLE_ADMIN') %}
+          <a href="{{ path('app_product') }}" class="hover:underline flex items-center space-x-1 text-lg">
+            <img src="/images/svg/product.svg" class="w-6 h-6 icon-white" alt="Products">
+            <span class="text-cream">Products</span>
+          </a>
+        {% endif %}
+ 
+        {% if is_granted('ROLE_STAFF') or is_granted('ROLE_ADMIN') %}
+          <a href="{{ path('app_order_index') }}" class="hover:underline flex items-center space-x-1 text-lg">
+            <img src="/images/svg/order_2.svg" class="w-6 h-6 icon-white" alt="Orders">
+            <span class="text-cream">Order Record</span>
+          </a>
+        {% endif %}
+        
+        {% if is_granted('ROLE_ADMIN') %}
+          <a href="{{ path('app_user_index') }}" class="hover:underline flex items-center space-x-1 text-lg">
+            <img src="/images/svg/user.svg" class="w-6 h-6 icon-white" alt="Users">
+            <span class="text-cream">Accounts</span>
+          </a>
+        {% endif %}
+
+        {% if is_granted('ROLE_ADMIN') %}
+          <a href="{{ path('app_activity_log_index') }}" class="hover:underline flex items-center space-x-1 text-lg">
+            <img src="/images/svg/activitylog.svg" class="w-6 h-6 icon-white" alt="Activity Log">
+            <span class="text-cream">Activity Log</span>
+          </a>
+        {% endif %}
+
+        <a href="{{ path('app_logout') }}" class="hover:underline flex items-center space-x-1 text-lg">
+          <img src="/images/svg/logout.svg" class="w-6 h-6 icon-white" alt="Logout">
+          <span class="text-cream">Logout</span>
+        </a>
+      {% else %}
+        <a href="{{ path('app_login') }}" class="hover:underline flex items-center space-x-1 text-lg">
+          <img src="/images/svg/account.svg" class="w-6 h-6 icon-white" alt="Login">
+          <span class="text-cream">Login</span>
+        </a>
+      {% endif %}
+    </nav>
+  </aside>
+
+  <main class="flex-1 flex flex-col overflow-hidden">
+    <div class="flex-1 overflow-y-auto" style="padding: 0;">
+      {% block body %}
+        <div class="container mx-auto px-4 mt-4">
+          {% for label, messages in app.flashes %}
+            {% for message in messages %}
+              <div class="mb-4 p-3 rounded 
+                {% if label == 'success' %} bg-green-100 text-green-800 
+                {% elseif label == 'error' %} bg-red-100 text-red-800 
+                {% elseif label == 'warning' %} bg-yellow-100 text-yellow-800 
+                {% else %} bg-gray-100 text-gray-800 
+                {% endif %}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+      {% endblock %}
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

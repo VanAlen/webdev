@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Products{% endblock %}
+
+{% block body %}
+<style>
+    .icon-white { filter: brightness(0) invert(1); }
+    .stat-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid white;
+        border-radius: 0.75rem;
+    }
+    .category-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid white;
+        border-radius: 0.75rem;
+        transition: all 0.2s ease;
+    }
+    .category-card:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="min-h-screen p-6" style="background-color: #0a1f0a;">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-2xl font-light text-white">Products</h1>
+            <p class="text-sm text-white/50 mt-1">Manage your inventory</p>
+        </div>
+        <div class="relative group">
+
+            <div class="absolute right-0 mt-2 w-48 bg-[#0a1f0a]/95 backdrop-blur-xl rounded-xl border border-white/20 hidden group-hover:block z-10">
+                <a href="{{ path('app_gem_new') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-white hover:bg-white/10 rounded-t-xl">
+                    <img src="/images/svg/gem.svg" class="w-4 h-4 icon-white"> Add Gem
+                </a>
+                <a href="{{ path('app_jewelries_new') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-white hover:bg-white/10">
+                    <img src="/images/svg/jewelry.svg" class="w-4 h-4 icon-white"> Add Jewelry
+                </a>
+                <a href="{{ path('app_gembundles_new') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-white hover:bg-white/10">
+                    <img src="/images/svg/bundle.svg" class="w-4 h-4 icon-white"> Add Bundle
+                </a>
+                <a href="{{ path('app_customjewelries_new') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-white hover:bg-white/10 rounded-b-xl">
+                    <img src="/images/svg/custom.svg" class="w-4 h-4 icon-white"> Add Custom
+                </a>
+            </div>
+        </div>
+    </div>
+
+<!-- Stats Row - Stock Status Text -->
+<div class="flex gap-3 mb-8">
+    <div class="flex-1 p-4 stat-card">
+        <p class="text-xs text-white/90">Total Products</p>
+        <p class="text-xl font-semibold text-white mt-1">{{ totalRecords|default('0') }}</p>
+    </div>
+    <div class="flex-1 p-4 stat-card">
+        <p class="text-xs text-white/90">Stock Status</p>
+        <p class="text-lg font-semibold text-yellow-400 mt-1">{{ lowStockText|default('Healthy') }}</p>
+    </div>
+    <div class="flex-1 p-4 stat-card">
+        <p class="text-xs text-white/90">Popular Stock</p>
+        <div class="flex items-center gap-2 mt-1">
+            <img src="/images/svg/{{ popularItem.icon }}" class="w-5 h-5 icon-white opacity-70">
+            <p class="text-lg font-semibold text-yellow-400">{{ popularItem.name }}</p>
+        </div>
+    </div>
+    <div class="flex-1 p-4 stat-card">
+        <p class="text-xs text-white/90">Categories</p>
+        <p class="text-xl font-semibold text-white mt-1">4</p>
+    </div>
+</div>
+
+    <!-- Categories Grid -->
+    <div class="grid grid-cols-2 gap-3">
+        <a href="{{ path('app_gem_index') }}" class="p-4 category-card">
+            <div class="flex items-center gap-3">
+                <img src="/images/svg/gem.svg" class="w-8 h-8 icon-white opacity-70">
+                <div>
+                    <p class="text-sm text-white/90">Total Gems</p>
+                    <p class="text-2xl font-semibold text-white">{{ gemCount }}</p>
+                </div>
+            </div>
+        </a>
+        <a href="{{ path('app_jewelries_index') }}" class="p-4 category-card">
+            <div class="flex items-center gap-3">
+                <img src="/images/svg/jewelry.svg" class="w-8 h-8 icon-white opacity-70">
+                <div>
+                    <p class="text-sm text-white/90">Total Jewelries</p>
+                    <p class="text-2xl font-semibold text-white">{{ jewelryCount }}</p>
+                </div>
+            </div>
+        </a>
+        <a href="{{ path('app_gembundles_index') }}" class="p-4 category-card">
+            <div class="flex items-center gap-3">
+                <img src="/images/svg/bundle.svg" class="w-8 h-8 icon-white opacity-70">
+                <div>
+                    <p class="text-sm text-white/90">Total Bundles</p>
+                    <p class="text-2xl font-semibold text-white">{{ bundleCount }}</p>
+                </div>
+            </div>
+        </a>
+        <a href="{{ path('app_customjewelries_index') }}" class="p-4 category-card">
+            <div class="flex items-center gap-3">
+                <img src="/images/svg/custom.svg" class="w-8 h-8 icon-white opacity-70">
+                <div>
+                    <p class="text-sm text-white/90">Total Custom</p>
+                    <p class="text-2xl font-semibold text-white">{{ customCount }}</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

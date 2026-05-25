@@ -1,0 +1,20 @@
+framework:
+    secret: '%env(APP_SECRET)%'
+    trusted_proxies: '127.0.0.1,REMOTE_ADDR'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
+    
+    session:
+        name: 'PHPSESSID'
+        handler_id: null
+        cookie_secure: auto
+        cookie_samesite: lax
+        cookie_lifetime: 86400
+        cookie_httponly: true
+        cookie_path: '/'
+        # CHANGE THIS LINE:
+        cookie_domain: ''  # Empty string, NOT null
+        save_path: '%kernel.cache_dir%/sessions'
+        # REMOVE the duplicate lines below
+    
+    assets:
+        base_urls: 'https://idalia-tetchy-myographically.ngrok-free.dev'

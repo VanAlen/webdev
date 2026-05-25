@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Order Item #{{ orderitem.id }}{% endblock %}
+
+{% block body %}
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+    }
+    .form-input {
+        width: 100%;
+        padding: 0.6rem 0.875rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 0.75rem;
+        color: white;
+    }
+    .form-input:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+    }
+    .form-label {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 0.35rem;
+    }
+    .product-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 0.75rem;
+        padding: 1rem;
+    }
+    body, div, p, span, label, h1, h2, h3, h4 {
+        color: white !important;
+    }
+</style>
+
+<div class="min-h-screen p-6" style="background-color: #0a1f0a;">
+    <div class="max-w-6xl mx-auto">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-light text-white">Edit Order Item #{{ orderitem.id }}</h1>
+                <p class="text-sm text-white/40 mt-1">Order #{{ orderitem.order.id }} · {{ orderitem.order.customer.username|default('Customer') }}</p>
+            </div>
+            <a href="{{ path('app_order_show', {'id': orderitem.order.id}) }}" class="px-4 py-2 bg-white/10 rounded-xl text-sm text-white hover:bg-white/20 transition">
+                Back to Order
+            </a>
+        </div>
+
+        <!-- Current item info -->
+        <div class="glass-card p-4 mb-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div>
+                    <p class="text-xs text-white/40">Product</p>
+                    <p class="text-white font-medium">
+                        {% if orderitem.gem %}Gem
+                        {% elseif orderitem.jewelry %}Jewelry
+                        {% elseif orderitem.gembundle %}Bundle
+                        {% endif %}
+                    </p>
+                </div>
+                <div>
+                    <p class="text-xs text-white/40">Current Qty</p>
+                    <p class="text-white font-medium">{{ orderitem.quantity }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-white/40">Unit Price</p>
+                    <p class="text-white font-medium">${{ orderitem.priceSnapshot|number_format(2) }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-white/40">Total</p>
+                    <p class="text-white font-medium">${{ (orderitem.quantity * orderitem.priceSnapshot)|number_format(2) }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="glass-card p-6">
+            {{ form_start(form) }}
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- Gem -->
+                <div class="product-card">
+                    <h4 class="text-white font-medium mb-3">💎 Gem</h4>
+                    {{ form_label(form.gem, '', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.gem, {'attr': {'class': 'form-input gem-select'}}) }}
+                    <div class="mt-3">
+                        {{ form_label(form.gem_quantity, 'Quantity', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.gem_quantity, {'attr': {'class': 'form-input gem-quantity', 'min': '0', 'value': orderitem.gem ? orderitem.quantity : 0}}) }}
+                    </div>
+                </div>
+
+                <!-- Jewelry -->
+                <div class="product-card">
+                    <h4 class="text-white font-medium mb-3">💍 Jewelry</h4>
+                    {{ form_label(form.jewelry, '', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.jewelry, {'attr': {'class': 'form-input jewelry-select'}}) }}
+                    <div class="mt-3">
+                        {{ form_label(form.jewelry_quantity, 'Quantity', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.jewelry_quantity, {'attr': {'class': 'form-input jewelry-quantity', 'min': '0', 'value': orderitem.jewelry ? orderitem.quantity : 0}}) }}
+                    </div>
+                </div>
+
+                <!-- Bundle -->
+                <div class="product-card">
+                    <h4 class="text-white font-medium mb-3">📦 Bundle</h4>
+                    {{ form_label(form.gembundle, '', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.gembundle, {'attr': {'class': 'form-input bundle-select'}}) }}
+                    <div class="mt-3">
+                        {{ form_label(form.bundle_quantity, 'Quantity', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.bundle_quantity, {'attr': {'class': 'form-input bundle-quantity', 'min': '0', 'value': orderitem.gembundle ? orderitem.quantity : 0}}) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Price preview (simplified) -->
+            <div class="mt-5 pt-4 border-t border-white/10 text-right">
+                <p class="text-white/60 text-sm">New total will be auto‑calculated</p>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex gap-3 mt-5 pt-4 border-t border-white/10">
+                <button type="submit" class="flex-1 px-5 py-2 bg-white/20 rounded-lg text-white hover:bg-white/30 transition">
+                    Save Changes
+                </button>
+                <a href="{{ path('app_order_show', {'id': orderitem.order.id}) }}" class="px-5 py-2 bg-white/10 rounded-lg text-white/70 hover:bg-white/20 transition">
+                    Cancel
+                </a>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function toggleContainer(select, containerClass) {
+        const container = document.querySelector(containerClass);
+        if (select && container) {
+            if (select.value) container.classList.remove('hidden');
+            else container.classList.add('hidden');
+            select.addEventListener('change', function() {
+                container.classList.toggle('hidden', !this.value);
+            });
+        }
+    }
+    toggleContainer(document.querySelector('#{{ form.gem.vars.id }}'), '.gem-quantity-container');
+    toggleContainer(document.querySelector('#{{ form.jewelry.vars.id }}'), '.jewelry-quantity-container');
+    toggleContainer(document.querySelector('#{{ form.gembundle.vars.id }}'), '.bundle-quantity-container');
+});
+</script>
+{% endblock %}

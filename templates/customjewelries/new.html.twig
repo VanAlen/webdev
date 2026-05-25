@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Custom Jewelry{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gray-50 py-10">
+    <div class="container mx-auto px-4">
+        <h1 class="text-3xl font-bold mb-8 text-black text-center">
+            Create New Custom Jewelry
+        </h1>
+
+        <div class="bg-white shadow-lg rounded-xl p-8 border border-gray-200">
+            {{ form_start(form, { 
+                'attr': { 
+                    'enctype': 'multipart/form-data',
+                    'class': 'space-y-6' 
+                } 
+            }) }}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    {{ form_label(form.gemtype, null, {
+                        'label_attr': {
+                            'class': 'block text-sm font-medium text-black mb-1'
+                        }
+                    }) }}
+                    {{ form_widget(form.gemtype, {
+                        'attr': {
+                            'class': 'block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 text-black'
+                        }
+                    }) }}
+                </div>
+
+                <div class="space-y-2">
+                    {{ form_label(form.jewelrytype, null, {
+                        'label_attr': {
+                            'class': 'block text-sm font-medium text-black mb-1'
+                        }
+                    }) }}
+                    {{ form_widget(form.jewelrytype, {
+                        'attr': {
+                            'class': 'block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 text-black'
+                        }
+                    }) }}
+                </div>
+
+                <div class="md:col-span-2 space-y-2">
+                    {{ form_label(form.notes, null, {
+                        'label_attr': {
+                            'class': 'block text-sm font-medium text-black mb-1'
+                        }
+                    }) }}
+                    {{ form_widget(form.notes, {
+                        'attr': {
+                            'class': 'block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 h-32 resize-none text-black'
+                        }
+                    }) }}
+                </div>
+
+                <div class="md:col-span-2 space-y-2">
+                    {{ form_label(form.imagepath, null, {
+                        'label_attr': {
+                            'class': 'block text-sm font-medium text-black mb-1'
+                        }
+                    }) }}
+                    {{ form_widget(form.imagepath, {
+                        'attr': {
+                            'class': 'block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 text-black'
+                        }
+                    }) }}
+                </div>
+            </div>
+
+            <div class="mt-8 flex space-x-4">
+                <button type="submit" class="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 shadow-sm">
+                    Create Custom Jewelry
+                </button>
+                <a href="{{ path('app_jewelries_index') }}" class="px-6 py-3 bg-gray-200 text-black font-medium rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition duration-200 shadow-sm">
+                    Back to list
+                </a>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

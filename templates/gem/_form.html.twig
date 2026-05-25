@@ -1,0 +1,6 @@
+{{ form_start(form) }}
+    {{ form_row(form.gemtype) }}
+    {{ form_row(form.carat) }}
+
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

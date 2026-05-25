@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gembundles{% endblock %}
+
+{% block body %}
+<style>
+    .icon-white { filter: brightness(0) invert(1); }
+    .table-container {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+    table th {
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        font-weight: 500;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    table td {
+        color: white;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    table tr:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+</style>
+
+<div class="min-h-screen p-6" style="background-color: #0a1f0a;">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-light text-white">Gembundles</h1>
+                <p class="text-sm text-white/50 mt-1">Manage your bundle collection</p>
+            </div>
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_STAFF') %}
+                <a href="{{ path('app_gembundles_new') }}" class="px-4 py-2 bg-white/10 rounded-xl text-sm text-white hover:bg-white/20 transition border border-white/20 flex items-center gap-2">
+                    <img src="/images/svg/add_2.svg" class="w-5 h-5 icon-white opacity-70 hover:opacity-100" alt="Add">
+                    Create New Bundle
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">ID</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Name</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Description</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Stock</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Price</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Created At</th>
+                            <th class="px-4 py-3 text-right text-xs font-medium text-white/60 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bundle in gembundles %}
+                        <tr class="hover:bg-white/5 transition">
+                            <td class="px-4 py-3 text-sm text-white/80">{{ bundle.id }}</td>
+                            <td class="px-4 py-3 text-sm text-white">{{ bundle.name }}</td>
+                            <td class="px-4 py-3 text-sm text-white/80">{{ bundle.description|slice(0, 50) }}{% if bundle.description|length > 50 %}...{% endif %}</td>
+                            <td class="px-4 py-3">
+                                {% if bundle.stock <= 5 and bundle.stock > 0 %}
+                                    <span class="px-2 py-1 text-xs rounded-full bg-yellow-500/20 text-yellow-300">{{ bundle.stock }}</span>
+                                {% elseif bundle.stock == 0 %}
+                                    <span class="px-2 py-1 text-xs rounded-full bg-red-500/20 text-red-300">{{ bundle.stock }}</span>
+                                {% else %}
+                                    <span class="text-sm text-white/80">{{ bundle.stock }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-3 text-sm font-medium text-white">${{ bundle.price|number_format(2) }}</td>
+                            <td class="px-4 py-3 text-sm text-white/80">{{ bundle.createdAt|date('Y-m-d') }}</td>
+                            <td class="px-4 py-3 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ path('app_gembundles_show', {'id': bundle.id}) }}" class="p-1 rounded hover:bg-white/10 transition" title="View">
+                                        <img src="/images/svg/eye.svg" class="w-4 h-4 icon-white opacity-70 hover:opacity-100" alt="View">
+                                    </a>
+                                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_STAFF') %}
+                                        <a href="{{ path('app_gembundles_edit', {'id': bundle.id}) }}" class="p-1 rounded hover:bg-white/10 transition" title="Edit">
+                                            <img src="/images/svg/edit_1.svg" class="w-4 h-4 icon-white opacity-70 hover:opacity-100" alt="Edit">
+                                        </a>
+                                        <form method="post" action="{{ path('app_gembundles_delete', {'id': bundle.id}) }}" onsubmit="return confirm('Are you sure?');" class="inline">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ bundle.id) }}">
+                                            <button type="submit" class="p-1 rounded hover:bg-white/10 transition" title="Delete">
+                                                <img src="/images/svg/trash_4.svg" class="w-4 h-4 icon-white opacity-70 hover:opacity-100" alt="Delete">
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8" class="px-4 py-8 text-center text-white/40">No bundles found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

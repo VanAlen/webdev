@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Custom Jewelries{% endblock %}
+
+{% block body %}
+<div class="min-h-screen flex flex-col py-10">
+    <div class="container mx-auto px-4 flex-1">
+
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left border">
+                <thead class="text-xs text-white uppercase bg-emerald-500">
+                    <tr>
+                        <th class="px-6 py-3">ID</th>
+                        <th class="px-6 py-3">Gem Type</th>
+                        <th class="px-6 py-3">Jewelry Type</th>
+                        <th class="px-6 py-3">Notes</th>
+                        <th class="px-6 py-3">Image Reference</th>
+                        <th class="px-6 py-3">Created At</th>
+                        <th class="px-6 py-3 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for jewelry in customjewelries %}
+                        <tr class="bg-white border-b hover:bg-gray-50 break-words text-forest">
+                            <td class="px-6 py-4">{{ jewelry.id }}</td>
+                            <td class="px-6 py-4">{{ jewelry.gemtype ? jewelry.gemtype.name : 'N/A' }}</td>
+                            <td class="px-6 py-4">{{ jewelry.jewelrytype ? jewelry.jewelrytype.name : 'N/A' }}</td>
+                            <td class="px-6 py-4">{{ jewelry.notes }}</td>
+                            <td class="px-6 py-4">
+                                {% if jewelry.imagepath %}
+                                    <img src="{{ asset(jewelry.imagepath) }}" class="h-16 w-16 object-cover rounded" alt="Jewelry Image">
+                                {% else %}
+                                    <span class="text-gray-400 italic">No image</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4">{{ jewelry.createdAt ? jewelry.createdAt|date('Y-m-d') : '' }}</td>
+                            <td class="px-6 py-4 text-right space-x-2">
+                                <a href="{{ path('app_customjewelries_show', {'id': jewelry.id}) }}" class="text-blue-600 hover:underline">Show</a>
+                                <a href="{{ path('app_customjewelries_edit', {'id': jewelry.id}) }}" class="text-green-600 hover:underline">Edit</a>
+                                <form method="post" action="{{ path('app_customjewelries_delete', {'id': jewelry.id}) }}" style="display:inline" onsubmit="return confirm('Are you sure?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jewelry.id) }}">
+                                    <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="px-6 py-4 text-center text-gray-600">No custom jewelries found</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-6 text-left">
+            {% if app.user %}
+                <a href="{{ path('app_customjewelries_new') }}" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                    Create New Custom Jewelry
+                </a>
+            {% else %}
+                <p class="text-yellow-800 bg-yellow-100 px-4 py-3 rounded shadow inline-block">
+                    Please log in to create a new custom jewelry.
+                </p>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

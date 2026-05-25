@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register | Gemz Crystalline</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/build/app.css">
+  <style>
+    /* Line input styling */
+    .line-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1.5px solid rgba(0, 0, 0, 0.15);
+      border-radius: 0;
+      padding: 0.5rem 0;
+      padding-right: 2rem;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+    
+    .line-input:focus {
+      outline: none;
+      border-bottom-color: #014421;
+      box-shadow: none;
+    }
+    
+    .line-input::placeholder {
+      color: rgba(0, 0, 0, 0.35);
+      font-size: 0.9rem;
+    }
+    
+    /* Password toggle button */
+    .password-toggle {
+      position: absolute;
+      right: 0;
+      bottom: 0.5rem;
+      cursor: pointer;
+      user-select: none;
+      color: rgba(0, 0, 0, 0.35);
+      transition: color 0.3s ease;
+    }
+    
+    .password-toggle:hover {
+      color: #014421;
+    }
+    
+    .password-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    /* Custom checkbox styling */
+    .custom-checkbox {
+      width: 1rem;
+      height: 1rem;
+      border-radius: 0.25rem;
+      border: 1px solid #d1d5db;
+      cursor: pointer;
+    }
+    
+    .custom-checkbox:checked {
+      background-color: #014421;
+      border-color: #014421;
+    }
+
+    /* Floating error panel */
+    .error-floating {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .error-floating.hide {
+      animation: slideOut 0.3s ease-out forwards;
+    }
+
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body class="m-0 p-0 overflow-hidden">
+  
+  <!-- Floating Error Panel -->
+  <div id="errorPanel" class="error-floating hidden">
+    <div class="bg-red-500 text-white px-6 py-4 rounded-lg shadow-2xl flex items-center space-x-3">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <div>
+        <p class="font-semibold" id="errorMessage">Email already registered!</p>
+        <p class="text-sm opacity-90">Please login or use a different email</p>
+      </div>
+      <button onclick="closeErrorPanel()" class="ml-4 hover:opacity-75">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  
+  <!-- FULLSCREEN SPLIT LAYOUT - 60/40 RATIO -->
+  <div class="flex h-screen w-screen">
+    
+    <!-- LEFT SIDE: Infographics (60%) with Gemz Crystalline Branding -->
+    <div class="w-[60%] relative overflow-hidden">
+      <!-- Background diagonal gradient -->
+      <div class="absolute inset-0" style="background: linear-gradient(135deg, #014421 50%, #2D6A4F 50%);"></div>
+      
+      <!-- PARENT DIV - has the IMAGE as background with zoom -->
+      <div class="relative z-10 w-full h-full bg-cover bg-center" 
+           style="background-image: url('/images/misc/login.jpg'); background-size: 150%; background-position: center;">
+        
+        <!-- Dark overlay for better text readability -->
+        <div class="absolute inset-0 bg-gradient-to-br from-[#014421]/70 to-[#2D6A4F]/70"></div>
+        
+        <!-- Content -->
+        <div class="relative h-full flex flex-col justify-between p-10 overflow-y-auto">
+          <!-- Top Section -->
+          <div>
+            <h2 class="text-5xl font-bold text-white mb-4 leading-tight">Join Our<br>Gemz Community</h2>
+            <p class="text-white/80 text-xl leading-relaxed mb-10 max-w-lg">
+              Create an account to discover authentic gemstones and handcrafted jewelry.
+            </p>
+
+            <!-- Features Grid - 2 columns -->
+            <div class="grid grid-cols-2 gap-6 mb-8">
+              <!-- Feature 1 -->
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-white font-semibold text-lg">Exclusive Access</h3>
+                  <p class="text-white/70 text-sm">Member-only collections</p>
+                </div>
+              </div>
+
+              <!-- Feature 2 -->
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-white font-semibold text-lg">Early Access</h3>
+                  <p class="text-white/70 text-sm">Be first to shop new arrivals</p>
+                </div>
+              </div>
+
+              <!-- Feature 3 -->
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-white font-semibold text-lg">Special Discounts</h3>
+                  <p class="text-white/70 text-sm">Member pricing & offers</p>
+                </div>
+              </div>
+
+              <!-- Feature 4 -->
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-white font-semibold text-lg">Wishlist</h3>
+                  <p class="text-white/70 text-sm">Save your favorite items</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial Section -->
+          <div class="pt-6 border-t border-white/20">
+            <div class="flex items-center space-x-1 mb-3">
+              <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+              <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+              <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+              <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+              <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+            </div>
+            <p class="text-white/90 text-base italic max-w-lg">"Joining Gemz was the best decision. The quality and service are unmatched!"</p>
+            <p class="text-white/60 text-sm mt-2">— Emily Parker, Verified Member</p>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE: Registration Form (40%) -->
+    <div class="w-[40%] flex items-center justify-center bg-white overflow-y-auto">
+      <div class="w-full max-w-[400px] p-8">
+        <!-- Header -->
+        <div class="mb-8">
+          <h1 class="text-2xl font-bold text-gray-900 mb-1">Create account</h1>
+          <p class="text-sm text-gray-500">Join the Gemz community</p>
+        </div>
+
+
+
+        <!-- Flash Messages -->
+        {% for message in app.flashes('success') %}
+            <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-2 rounded-lg mb-4 text-sm">
+                ✓ {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg mb-4 text-sm">
+                ✗ {{ message }}
+            </div>
+        {% endfor %}
+
+        <!-- Registration Form -->
+        {{ form_start(registrationForm, { 'attr': { 'class': 'space-y-5', 'id': 'registrationForm' } }) }}
+
+          <!-- Username Field -->
+          <div>
+            {{ form_label(registrationForm.username, 'Username', { 'label_attr': { 'class': 'block text-sm font-medium text-gray-700 mb-2' } }) }}
+            {{ form_widget(registrationForm.username, { 
+                'attr': { 
+                    'class': 'line-input w-full text-gray-900',
+                    'placeholder': 'Choose a username'
+                } 
+            }) }}
+            {{ form_errors(registrationForm.username, { 'attr': { 'class': 'text-red-500 text-xs mt-1' } }) }}
+          </div>
+
+          <!-- Email Field with real-time check -->
+          <div>
+            {{ form_label(registrationForm.email, 'Email', { 'label_attr': { 'class': 'block text-sm font-medium text-gray-700 mb-2' } }) }}
+            {{ form_widget(registrationForm.email, { 
+                'attr': { 
+                    'class': 'line-input w-full text-gray-900',
+                    'placeholder': 'Enter your email',
+                    'id': 'registration_email'
+                } 
+            }) }}
+            <div id="emailError" class="text-red-500 text-xs mt-1 hidden"></div>
+            {{ form_errors(registrationForm.email, { 'attr': { 'class': 'text-red-500 text-xs mt-1' } }) }}
+          </div>
+
+              <!-- Password Field with toggle -->
+              <div>
+                  {{ form_label(registrationForm.plainPassword, 'Password', { 'label_attr': { 'class': 'block text-sm font-medium text-gray-700 mb-2' } }) }}
+                  <div class="password-wrapper">
+                      {{ form_widget(registrationForm.plainPassword, { 
+                          'attr': { 
+                              'class': 'line-input w-full text-gray-900',
+                              'placeholder': 'Create a password',
+                              'id': 'inputPassword'
+                          } 
+                      }) }}
+                    <button type="button"
+                            class="password-toggle"
+                            onclick="togglePasswordVisibility()">
+                        <img id="eyeOpen" src="/images/svg/eye.svg" class="w-5 h-5 opacity-50 hover:opacity-100">
+                        <img id="eyeClosed" src="/images/svg/eyeclose.svg" class="w-5 h-5 opacity-50 hover:opacity-100 hidden">
+                    </button>
+                  </div>
+                  {{ form_errors(registrationForm.plainPassword, { 'attr': { 'class': 'text-red-500 text-xs mt-1' } }) }}
+              </div>
+
+          <!-- Agree Terms -->
+          <div class="flex items-center pt-2">
+            {{ form_widget(registrationForm.agreeTerms, { 
+                'attr': { 
+                    'class': 'custom-checkbox mr-2'
+                } 
+            }) }}
+            {{ form_label(registrationForm.agreeTerms, 'I agree to the Terms and Conditions', { 'label_attr': { 'class': 'text-sm text-gray-600 cursor-pointer' } }) }}
+            {{ form_errors(registrationForm.agreeTerms) }}
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" 
+                  class="w-full py-3 px-4 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-[#014421] to-[#2D6A4F] hover:from-[#2D6A4F] hover:to-[#014421] transition mt-6">
+            Create Account
+          </button>
+
+        {{ form_end(registrationForm) }}
+
+                <!-- Divider -->
+        <div class="relative my-2">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-200"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-1 bg-white text-gray-400">Or register with email</span>
+          </div>
+        </div>
+
+        
+                <!-- Google Sign-up Button (ADDED) -->
+        <a href="{{ path('connect_google_start') }}" 
+           class="w-full flex justify-center items-center py-3 px-4 rounded-lg text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition mb-6">
+            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Sign up with Google
+        </a>
+
+
+
+        <!-- Login Link -->
+        <p class="mt-8 text-center text-sm text-gray-500">
+          Already have an account?
+          <a href="{{ path('app_login') }}" class="font-semibold text-[#014421] hover:text-[#2D6A4F] ml-1">
+            Sign in →
+          </a>
+        </p>
+      </div>
+    </div>
+
+  </div>
+  
+<script>
+
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('registration_form_plainPassword');
+    const eyeOpen = document.getElementById('eyeOpen');
+    const eyeClosed = document.getElementById('eyeClosed');
+    
+    if (!passwordInput) return;
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeOpen.classList.add('hidden');
+        eyeClosed.classList.remove('hidden');
+    } else {
+        passwordInput.type = 'password';
+        eyeOpen.classList.remove('hidden');
+        eyeClosed.classList.add('hidden');
+    }
+}
+    function showErrorPanel(message) {
+        const panel = document.getElementById('errorPanel');
+        const errorMessage = document.getElementById('errorMessage');
+        errorMessage.textContent = message;
+        panel.classList.remove('hidden');
+        panel.classList.remove('hide');
+
+        setTimeout(() => {
+            panel.classList.add('hide');
+            setTimeout(() => {
+                panel.classList.add('hidden');
+            }, 300);
+        }, 5000);
+    }
+
+    function closeErrorPanel() {
+        const panel = document.getElementById('errorPanel');
+        panel.classList.add('hide');
+        setTimeout(() => {
+            panel.classList.add('hidden');
+        }, 300);
+    }
+
+    // SINGLE email check on blur (no duplicates)
+    const emailInput = document.getElementById('registration_email');
+    if (emailInput) {
+        emailInput.addEventListener('blur', async function() {
+            const email = this.value;
+            if (email && email.includes('@')) {
+                try {
+                    const response = await fetch('/check-email', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email: email })
+                    });
+                    const data = await response.json();
+
+                    if (data.exists) {
+                        this.classList.add('border-red-500');
+                        let errorDiv = document.getElementById('email-error');
+                        if (!errorDiv) {
+                            errorDiv = document.createElement('div');
+                            errorDiv.id = 'email-error';
+                            errorDiv.className = 'text-red-500 text-xs mt-1';
+                            this.parentNode.appendChild(errorDiv);
+                        }
+                        errorDiv.textContent = data.isVerified ?
+                            'Email already registered. Please login instead.' :
+                            'Email already registered but not verified. Check your inbox or resend verification.';
+                        showErrorPanel(errorDiv.textContent);
+                    } else {
+                        this.classList.remove('border-red-500');
+                        const errorDiv = document.getElementById('email-error');
+                        if (errorDiv) errorDiv.remove();
+                    }
+                } catch (error) {
+                    console.error('Error checking email:', error);
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/icon/crystal1.ico" type="image/x-icon">
+    <title>Gemz Crystalline</title>
+    <link rel="stylesheet" href="/build/app.css">
+</head>
+<body>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500&display=swap');
+
+    :root {
+        --gold: #c9a84c;
+        --gold-light: #e8d5a3;
+        --glass-bg: rgba(255, 255, 255, 0.04);
+        --glass-border: rgba(201, 168, 76, 0.2);
+        --glass-card: rgba(255, 255, 255, 0.06);
+        --text-primary: #f0ede8;
+        --text-muted: #a89880;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        background: 
+            radial-gradient(ellipse at 20% 50%, rgba(1, 68, 33, 0.4) 0%, transparent 60%),
+            radial-gradient(ellipse at 80% 20%, rgba(201, 168, 76, 0.08) 0%, transparent 50%),
+            linear-gradient(160deg, #0a0a0a 0%, #0d1f12 50%, #000000 100%);
+        min-height: 100vh;
+        font-family: 'Jost', sans-serif;
+    }
+
+    /* ── Main container ── */
+    .max-w-6xl.mx-auto.px-\[5\%\].py-8 {
+        background: rgba(10, 18, 12, 0.6) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border: 1px solid var(--glass-border) !important;
+        box-shadow: 
+            0 0 0 1px rgba(0,0,0,0.5),
+            0 40px 100px rgba(0, 0, 0, 0.7),
+            inset 0 1px 0 rgba(201, 168, 76, 0.15) !important;
+    }
+
+    /* ── Section headings ── */
+    .max-w-6xl h2 {
+        font-family: 'Cormorant Garamond', serif !important;
+        font-weight: 300 !important;
+        letter-spacing: 0.05em !important;
+        color: var(--text-primary) !important;
+    }
+
+    .max-w-6xl h3, .max-w-6xl h4 {
+        font-family: 'Cormorant Garamond', serif !important;
+        color: var(--gold-light) !important;
+        font-weight: 400 !important;
+    }
+
+    .max-w-6xl p, .max-w-6xl span:not(.absolute):not(.font-bold) {
+        color: var(--text-muted) !important;
+    }
+
+    /* ── Product cards ── */
+    .product-card {
+        background: var(--glass-card) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid var(--glass-border) !important;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+        transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease !important;
+    }
+
+    .product-card:hover {
+        transform: translateY(-8px) !important;
+        border-color: var(--gold) !important;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 20px rgba(201,168,76,0.1) !important;
+    }
+
+    .product-card h3 {
+        color: var(--text-primary) !important;
+        font-family: 'Cormorant Garamond', serif !important;
+        font-size: 1.1rem !important;
+    }
+
+    .product-card .font-bold {
+        color: var(--gold) !important;
+        font-family: 'Jost', sans-serif !important;
+        letter-spacing: 0.05em !important;
+    }
+
+    .product-card p { color: var(--text-muted) !important; }
+
+    /* Image sizing fix */
+    .product-card > div:first-child {
+        height: 192px !important;
+        overflow: hidden !important;
+    }
+    .product-card img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        transition: transform 0.6s ease !important;
+    }
+    .product-card:hover img { transform: scale(1.08) !important; }
+
+    /* ── Filter buttons ── */
+    .filter-btn {
+        border-color: rgba(201, 168, 76, 0.3) !important;
+        color: var(--text-muted) !important;
+        background: transparent !important;
+        font-family: 'Jost', sans-serif !important;
+        letter-spacing: 0.08em !important;
+        font-size: 0.75rem !important;
+        text-transform: uppercase !important;
+        transition: all 0.3s ease !important;
+    }
+    .filter-btn:hover {
+        border-color: var(--gold) !important;
+        color: var(--gold) !important;
+    }
+    .filter-btn.active {
+        background: linear-gradient(135deg, #014421, #012a15) !important;
+        border-color: var(--gold) !important;
+        color: var(--gold-light) !important;
+        box-shadow: 0 0 15px rgba(201,168,76,0.15) !important;
+    }
+
+    /* ── Why Us cards ── */
+    #why .grid > div {
+        background: var(--glass-card) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid var(--glass-border) !important;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3) !important;
+        transition: transform 0.3s ease, border-color 0.3s ease !important;
+    }
+    #why .grid > div:hover {
+        border-color: var(--gold) !important;
+        transform: translateY(-6px) !important;
+    }
+    #why h3 { color: var(--gold-light) !important; }
+    #why p  { color: var(--text-muted) !important; }
+
+    /* ── About section ── */
+    #about {
+        background: rgba(5, 15, 8, 0.5) !important;
+        border: 1px solid var(--glass-border) !important;
+        backdrop-filter: blur(10px) !important;
+    }
+    #about h2, #about h3 { color: var(--text-primary) !important; }
+    #about p { color: var(--text-muted) !important; }
+
+    /* Team cards */
+    #about .grid > div {
+        background: var(--glass-card) !important;
+        border: 1px solid var(--glass-border) !important;
+        backdrop-filter: blur(8px) !important;
+        transition: transform 0.3s ease, border-color 0.3s ease !important;
+    }
+    #about .grid > div:hover {
+        border-color: var(--gold) !important;
+        transform: translateY(-6px) !important;
+    }
+    #about h4 { color: var(--gold-light) !important; }
+    #about span { color: var(--text-muted) !important; background: rgba(201,168,76,0.08) !important; }
+
+    /* ── Divider accent ── */
+    .text-center.mb-12::after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        margin: 12px auto 0;
+    }
+
+    /* ── Show more button ── */
+    #show-more-btn {
+        background: transparent !important;
+        border: 1px solid var(--gold) !important;
+        color: var(--gold) !important;
+        font-family: 'Jost', sans-serif !important;
+        letter-spacing: 0.1em !important;
+        text-transform: uppercase !important;
+        font-size: 0.75rem !important;
+        transition: all 0.3s ease !important;
+    }
+    #show-more-btn:hover {
+        background: rgba(201,168,76,0.1) !important;
+        box-shadow: 0 0 20px rgba(201,168,76,0.2) !important;
+    }
+
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 80px;
+    }
+    * {
+        font-family: 'Jost', sans-serif !important;
+    }
+
+    .max-w-6xl h2,
+    .max-w-6xl h3,
+    .max-w-6xl h4,
+    #contact h2,
+    #contact h3 {
+        font-family: 'Jost', sans-serif !important;
+        font-weight: 300 !important;
+        color: #ffffff !important;
+    }
+
+    .max-w-6xl p,
+    .max-w-6xl span:not(.absolute):not(.font-bold),
+    #contact p {
+        color: #ffffff !important;
+    }
+</style>
+<!-- Navigation with active state -->
+<nav class="bg-[#014421] sticky top-0 z-50 px-[5%] py-4 flex justify-between items-center shadow-lg">
+    <img src="/images/gemtitle-w.webp" alt="Gemz Crystalline" 
+         class="h-10 w-auto"
+         style="transform: scale(1.6) translateY(-2px); transform-origin: left center;">
+    <div class="flex gap-8 items-center">
+        <a href="#home" class="text-white no-underline opacity-100 hover:opacity-80 transition-opacity border-b-2 border-[#C8D8B8] pb-1">Home</a>
+        <a href="#products" class="text-white no-underline opacity-100 hover:opacity-80 transition-opacity">Products</a>
+        <a href="#why" class="text-white no-underline opacity-100 hover:opacity-80 transition-opacity">Why Us</a>
+        <a href="#about" class="text-white no-underline opacity-100 hover:opacity-80 transition-opacity">About</a>
+        <a href="#contact" class="text-white no-underline opacity-100 hover:opacity-80 transition-opacity">Contact</a>
+        <a href="/login" class="bg-[#C8D8B8] text-[#014421] px-6 py-2 rounded-full font-semibold">Login</a>
+    </div>
+</nav>
+
+<!-- MAIN BANNER SECTION -->
+<section id="home" class="relative overflow-hidden w-full">
+    <div class="absolute inset-0" style="background: linear-gradient(135deg, #014421 50%, #2D6A4F 50%);"></div>
+    <div class="relative z-10 w-full h-[500px] bg-cover bg-center" 
+         style="background-image: url('/images/misc/banner-3.png'); background-size: 150%; background-position: left center;">
+        <div class="flex flex-col md:flex-row w-full h-full">
+            <div class="flex-1 h-full flex items-center justify-center text-white">
+                <div class="text-center md:text-left p-6">
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight">
+                        Timeless Elegance,<br>Modern Convenience
+                    </h1>
+                    <p class="text-[#E6E8D3] text-lg mt-4 max-w-md">
+                        Discover authentic gemstones and handcrafted jewelry, delivered to your doorstep.
+                    </p>
+                    {% if app.user %}
+                        <a href="{{ path('app_product') }}" class="inline-block bg-[#C8D8B8] text-[#014421] px-8 py-3 rounded-full font-semibold mt-6 hover:bg-white transition-colors">
+                            Shop Now →
+                        </a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="inline-block bg-[#C8D8B8] text-[#014421] px-8 py-3 rounded-full font-semibold mt-6 hover:bg-white transition-colors">
+                            Shop Now!
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="flex-1 h-full flex items-center justify-center">
+                <img src="/images/misc/banner-1.png" alt="Right" class="w-[63%] h-auto object-contain">
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="max-w-6xl mx-auto px-[5%] py-8" style="border-radius: 30px; margin: 20px auto;">
+    <!-- Products Section -->
+    <section id="products">
+        <div class="text-center mb-12">
+            <h2 class="text-[#014421] text-4xl md:text-5xl mb-2">Our Premium Collection</h2>
+            <p class="text-gray-600 text-lg">Handpicked gemstones and elegant jewelry pieces</p>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-3 mb-10">
+            <button onclick="filterProducts('all', event)" class="filter-btn active px-6 py-2.5 rounded-full border-2 border-[#014421] text-[#014421] font-semibold hover:bg-[#014421] hover:text-white transition-all duration-300">All</button>
+            <button onclick="filterProducts('gems', event)" class="filter-btn px-6 py-2.5 rounded-full border-2 border-[#014421] text-[#014421] font-semibold hover:bg-[#014421] hover:text-white transition-all duration-300">💎 Gemstones</button>
+            <button onclick="filterProducts('jewelry', event)" class="filter-btn px-6 py-2.5 rounded-full border-2 border-[#014421] text-[#014421] font-semibold hover:bg-[#014421] hover:text-white transition-all duration-300">✨ Jewelry</button>
+            <button onclick="filterProducts('bundle', event)" class="filter-btn px-6 py-2.5 rounded-full border-2 border-[#014421] text-[#014421] font-semibold hover:bg-[#014421] hover:text-white transition-all duration-300">🎁 Bundles</button>
+            <button onclick="filterProducts('sale', event)" class="filter-btn px-6 py-2.5 rounded-full border-2 border-[#014421] text-[#014421] font-semibold hover:bg-[#014421] hover:text-white transition-all duration-300">🔥 On Sale</button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 my-8" id="products-grid">
+            <!-- Gem 1 - Ruby Oval -->
+            <a href="{{ path('app_login') }}" class="product-card bg-white rounded-xl overflow-hidden no-underline text-inherit shadow-md hover:shadow-xl transition-all hover:-translate-y-1" data-category="gems" data-price="599">
+                <div class="h-48 overflow-hidden relative">
+                    <img src="/images/gems/ruby_oval.png" alt="Ruby Oval" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    <span class="absolute top-2 left-2 bg-[#014421] text-white text-xs px-2 py-1 rounded-full z-10">BESTSELLER</span>
+                </div>
+                <div class="p-4">
+                    <span class="text-[#2D6A4F] text-xs uppercase tracking-wider flex items-center gap-1">Gemstone</span>
+                    <h3 class="text-[#014421] my-1 text-lg">Ruby Oval 2.5 carat</h3>
+                    <div class="flex items-center justify-between mt-1">
+                        <p class="text-[#014421] font-semibold">2.5 carat</p>
+                        <span class="font-bold text-[#014421]">$599</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Gem 2 - Sapphire Cushion -->
+            <a href="{{ path('app_login') }}" class="product-card bg-white rounded-xl overflow-hidden no-underline text-inherit shadow-md hover:shadow-xl transition-all hover:-translate-y-1" data-category="gems" data-price="899">
+                <div class="h-48 overflow-hidden">
+                    <img src="/images/gems/sapphire_cushion.png" alt="Sapphire Cushion" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                </div>
+                <div class="p-4">
+                    <span class="text-[#2D6A4F] text-xs uppercase tracking-wider flex items-center gap-1">Gemstone</span>
+                    <h3 class="text-[#014421] my-1 text-lg">Blue Sapphire Cushion 3.2 carat</h3>
+                    <div class="flex items-center justify-between mt-1">
+                        <p class="text-[#014421] font-semibold">3.2 carat</p>
+                        <span class="font-bold text-[#014421]">$899</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Gem 3 - Diamond Round -->
+            <a href="{{ path('app_login') }}" class="product-card bg-white rounded-xl overflow-hidden no-underline text-inherit shadow-md hover:shadow-xl transition-all hover:-translate-y-1" data-category="gems" data-price="1299">
+                <div class="h-48 overflow-hidden">
+                    <img src="/images/gems/diamond_round.png" alt="Diamond Round" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                </div>
+                <div class="p-4">
+                    <span class="text-[#2D6A4F] text-xs uppercase tracking-wider flex items-center gap-1">Gemstone</span>
+                    <h3 class="text-[#014421] my-1 text-lg">Diamond Round 1.2 carat</h3>
+                    <div class="flex items-center justify-between mt-1">
+                        <p class="text-[#014421] font-semibold">1.2 carat</p>
+                        <span class="font-bold text-[#014421]">$1,299</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Gem 4 - Amethyst (Sale) -->
+            <a href="{{ path('app_login') }}" class="product-card bg-white rounded-xl overflow-hidden no-underline text-inherit shadow-md hover:shadow-xl transition-all hover:-translate-y-1" data-category="gems sale" data-price="149">
+                <div class="h-48 overflow-hidden relative">
+                    <img src="/images/gems/amethyst_brilliant.png" alt="Amethyst" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    <span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full z-10">-30%</span>
+                </div>
+                <div class="p-4">
+                    <span class="text-[#2D6A4F] text-xs uppercase tracking-wider flex items-center gap-1">Sale</span>
+                    <h3 class="text-[#014421] my-1 text-lg">Amethyst Brilliant Cut 4.2 carat</h3>
+                    <div class="flex items-center justify-between mt-1">
+                        <span class="text-xs line-through text-gray-400">$210</span>
+                        <span class="font-bold text-red-600">$149</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Jewelry 1 - Diamond Necklace -->
+            <a href="{{ path('app_login') }}" class="product-card bg-white rounded-xl overflow-hidden no-underline text-inherit shadow-md hover:shadow-xl transition-all hover:-translate-y-1" data-category="jewelry" data-price="799">
+                <div class="h-48 overflow-hidden">
+                    <img src="/images/jewelries/693f49274761c.webp" alt="Diamond Necklace" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                </div>
+                <div class="p-4">
+                    <span class="text-[#2D6A4F] text-xs uppercase tracking-wider flex items-center gap-1">Jewelry</span>
+                    <h3 class="text-[#014421] my-1 text-lg">Diamond Necklace</h3>
+                    <div class="flex items-center justify-between mt-1">
+                        <span class="text-xs text-gray-500">18K Gold</span>
+                        <span class="font-bold text-[#014421]">$799</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Jewelry 2 - Ruby Earrings -->
+            <a href="{{ path('app_login') }}" class="product-card bg-white rounded-xl overflow-hidden no-underline text-inherit shadow-md hover:shadow-xl transition-all hover:-translate-y-1" data-category="jewelry" data-price="449">
+                <div class="h-48 overflow-hidden">
+                    <img src="/images/jewelries/ruby_earrings.webp" alt="Ruby Earrings" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                </div>
+                <div class="p-4">
+                    <span class="text-[#2D6A4F] text-xs uppercase tracking-wider flex items-center gap-1">Jewelry</span>
+                    <h3 class="text-[#014421] my-1 text-lg">Ruby Earrings Sterling Silver</h3>
+                    <div class="flex items-center justify-between mt-1">
+                        <span class="text-xs text-gray-500">Sterling Silver</span>
+                        <span class="font-bold text-[#014421]">$449</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Jewelry 3 - Sapphire Necklace -->
+            <a href="{{ path('app_login') }}" class="product-card bg-white rounded-xl overflow-hidden no-underline text-inherit shadow-md hover:shadow-xl transition-all hover:-translate-y-1" data-category="jewelry" data-price="1299">
+                <div class="h-48 overflow-hidden">
+                    <img src="/images/jewelries/sap_necklace.webp" alt="Sapphire Necklace" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                </div>
+                <div class="p-4">
+                    <span class="text-[#2D6A4F] text-xs uppercase tracking-wider flex items-center gap-1">Jewelry</span>
+                    <h3 class="text-[#014421] my-1 text-lg">Sapphire Pendant Necklace</h3>
+                    <div class="flex items-center justify-between mt-1">
+                        <span class="text-xs text-gray-500">0.5 carat</span>
+                        <span class="font-bold text-[#014421]">$1,299</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Jewelry 4 - Emerald Ring (Sale) -->
+            <a href="{{ path('app_login') }}" class="product-card bg-white rounded-xl overflow-hidden no-underline text-inherit shadow-md hover:shadow-xl transition-all hover:-translate-y-1" data-category="jewelry sale" data-price="299">
+                <div class="h-48 overflow-hidden relative">
+                    <img src="/images/jewelries/eme_ring.webp" alt="Emerald Ring" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    <span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full z-10">-25%</span>
+                </div>
+                <div class="p-4">
+                    <span class="text-[#2D6A4F] text-xs uppercase tracking-wider flex items-center gap-1">Sale</span>
+                    <h3 class="text-[#014421] my-1 text-lg">Emerald Ring Gold</h3>
+                    <div class="flex items-center justify-between mt-1">
+                        <span class="text-xs line-through text-gray-400">$399</span>
+                        <span class="font-bold text-red-600">$299</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Bundle 1 -->
+            <a href="{{ path('app_login') }}" class="product-card bg-white rounded-xl overflow-hidden no-underline text-inherit shadow-md hover:shadow-xl transition-all hover:-translate-y-1" data-category="bundle" data-price="299">
+                <div class="h-48 overflow-hidden relative">
+                    <img src="/images/bundles/ruby_bundle.jpg" alt="Gem Bundle" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    <span class="absolute top-2 left-2 bg-[#014421] text-white text-xs px-2 py-1 rounded-full z-10">BESTSELLER</span>
+                </div>
+                <div class="p-4">
+                    <span class="text-[#2D6A4F] text-xs uppercase tracking-wider flex items-center gap-1">🎁 Starter Bundle</span>
+                    <h3 class="text-[#014421] my-1 text-lg">Gem Lover's Set</h3>
+                    <div class="flex items-center justify-between mt-1">
+                        <span class="text-xs text-gray-500">9 gemstones</span>
+                        <span class="font-bold text-[#014421]">$299</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Bundle 2 -->
+            <a href="{{ path('app_login') }}" class="product-card bg-white rounded-xl overflow-hidden no-underline text-inherit shadow-md hover:shadow-xl transition-all hover:-translate-y-1" data-category="bundle" data-price="499">
+                <div class="h-48 overflow-hidden">
+                    <img src="/images/bundles/earring_necklace.jpg" alt="Jewelry Bundle" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                </div>
+                <div class="p-4">
+                    <span class="text-[#2D6A4F] text-xs uppercase tracking-wider flex items-center gap-1">🎁 Elegance Set</span>
+                    <h3 class="text-[#014421] my-1 text-lg">Necklace + Earrings</h3>
+                    <div class="flex items-center justify-between mt-1">
+                        <span class="text-xs text-gray-500">Sterling Gold</span>
+                        <span class="font-bold text-[#014421]">$499</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="text-center mt-8" id="show-more-container">
+            <button onclick="toggleProducts()" id="show-more-btn" class="bg-[#014421] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#2D6A4F] transition-colors inline-flex items-center gap-2">
+                <span>Show More Products</span>
+                <span class="text-xl">↓</span>
+            </button>
+        </div>
+
+        <div class="text-center mt-4 text-gray-600 text-sm" id="category-count">
+            Showing <span id="visible-count">4</span> of <span id="total-count">10</span> products
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section id="why" class="my-16">
+        <div class="text-center mb-12">
+            <h2 class="text-[#014421] text-4xl md:text-5xl mb-2">Why Choose Us</h2>
+            <p class="text-gray-600 text-lg">Quality, trust, and service you deserve</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-green p-8 rounded-2xl text-center shadow-sm hover:shadow-md transition-transform hover:-translate-y-1">
+                <div class="w-12 h-12 mx-auto mb-4" style="background-color: #ffffff; -webkit-mask: url('/images/svg/gem.svg') no-repeat center / contain; mask: url('/images/svg/gem.svg') no-repeat center / contain;"></div>
+                <h3 class="text-[#014421] mb-2">Certified Authentic</h3>
+                <p class="text-gray-600 leading-relaxed text-sm">Every gemstone comes with official certification</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl text-center shadow-sm hover:shadow-md transition-transform hover:-translate-y-1">
+                <div class="w-12 h-12 mx-auto mb-4" style="background-color: #ffffff; -webkit-mask: url('/images/svg/care.svg') no-repeat center / contain; mask: url('/images/svg/care.svg') no-repeat center / contain;"></div>
+                <h3 class="text-[#014421] mb-2">Handcrafted with Care</h3>
+                <p class="text-gray-600 leading-relaxed text-sm">Each piece is meticulously crafted</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl text-center shadow-sm hover:shadow-md transition-transform hover:-translate-y-1">
+                <div class="w-12 h-12 mx-auto mb-4" style="background-color: #ffffff; -webkit-mask: url('/images/svg/leaf.svg') no-repeat center / contain; mask: url('/images/svg/leaf.svg') no-repeat center / contain;"></div>
+                <h3 class="text-[#014421] mb-2">Ethically Sourced</h3>
+                <p class="text-gray-600 leading-relaxed text-sm">We partner with suppliers who follow responsible mining</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl text-center shadow-sm hover:shadow-md transition-transform hover:-translate-y-1">
+                <div class="w-12 h-12 mx-auto mb-4" style="background-color: #ffffff; -webkit-mask: url('/images/svg/happy.svg') no-repeat center / contain; mask: url('/images/svg/happy.svg') no-repeat center / contain;"></div>
+                <h3 class="text-[#014421] mb-2">Satisfaction Guaranteed</h3>
+                <p class="text-gray-600 leading-relaxed text-sm">Love it or return it within 30 days</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="bg-gradient-to-br from-[#f8faf5] to-[#e8f0e3] rounded-2xl p-8 md:p-16 my-12">
+        <div class="flex items-center gap-16 flex-wrap">
+            <div class="flex-1 min-w-[300px]">
+                <h2 class="text-[#014421] text-4xl md:text-5xl mb-6">About Gemz Crystalline</h2>
+                <p class="text-[#014421] leading-relaxed mb-4 text-lg">Founded in 2020, Gemz Crystalline brings timeless elegance to modern jewelry lovers. We combine traditional craftsmanship with contemporary design, ensuring each piece tells a unique story.</p>
+                <p class="text-gray-600 leading-relaxed">Our commitment to quality and authenticity has made us a trusted name in the world of fine gemstones and jewelry. With over 1000+ happy customers worldwide, we continue to spread the beauty of natural gemstones.</p>
+            </div>
+            <div class="flex-1 min-w-[300px]">
+                <img src="/images/misc/workshop.jpg" alt="Our Workshop" class="w-full rounded-2xl shadow-xl">
+            </div>
+        </div>
+
+        <div class="mt-20 py-8">
+            <h3 class="text-[#014421] text-3xl md:text-4xl text-center mb-12 relative">Meet Our Expert Team</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center bg-white p-8 rounded-2xl shadow-lg transition-all duration-300 hover:-translate-y-2.5 hover:shadow-xl relative overflow-hidden">
+                    <img src="/images/team/ceo.png" alt="Team Member" class="w-32 h-32 md:w-36 md:h-36 rounded-full object-cover border-4 border-[#014421] mb-6 transition-transform duration-300 shadow-md mx-auto">
+                    <h4 class="text-[#014421] text-xl mb-1 font-bold">Gemz Rightz</h4>
+                    <p class="text-[#2D6A4F] font-semibold mb-2 text-base">Founder & CEO</p>
+                    <span class="inline-block text-gray-600 text-sm bg-[#f0f7ea] px-4 py-1.5 rounded-full font-medium">15 years in gemology</span>
+                </div>
+                <div class="text-center bg-white p-8 rounded-2xl shadow-lg transition-all duration-300 hover:-translate-y-2.5 hover:shadow-xl relative overflow-hidden">
+                    <img src="/images/team/coo.png" alt="Team Member" class="w-32 h-32 md:w-36 md:h-36 rounded-full object-cover border-4 border-[#014421] mb-6 transition-transform duration-300 shadow-md mx-auto">
+                    <h4 class="text-[#014421] text-xl mb-1 font-bold">Mikz Guelz</h4>
+                    <p class="text-[#2D6A4F] font-semibold mb-2 text-base">Master Gemologist</p>
+                    <span class="inline-block text-gray-600 text-sm bg-[#f0f7ea] px-4 py-1.5 rounded-full font-medium">GIA Certified</span>
+                </div>
+                <div class="text-center bg-white p-8 rounded-2xl shadow-lg transition-all duration-300 hover:-translate-y-2.5 hover:shadow-xl relative overflow-hidden">
+                    <img src="/images/team/staff.png" alt="Team Member" class="w-32 h-32 md:w-36 md:h-36 rounded-full object-cover border-4 border-[#014421] mb-6 transition-transform duration-300 shadow-md mx-auto">
+                    <h4 class="text-[#014421] text-xl mb-1 font-bold">Korina Sanches</h4>
+                    <p class="text-[#2D6A4F] font-semibold mb-2 text-base">Lead Designer</p>
+                    <span class="inline-block text-gray-600 text-sm bg-[#f0f7ea] px-4 py-1.5 rounded-full font-medium">Award-winning designer</span>
+                </div>
+                <div class="text-center bg-white p-8 rounded-2xl shadow-lg transition-all duration-300 hover:-translate-y-2.5 hover:shadow-xl relative overflow-hidden">
+                    <img src="/images/team/staff1.png" alt="Team Member" class="w-32 h-32 md:w-36 md:h-36 rounded-full object-cover border-4 border-[#014421] mb-6 transition-transform duration-300 shadow-md mx-auto">
+                    <h4 class="text-[#014421] text-xl mb-1 font-bold">Kim Escobar</h4>
+                    <p class="text-[#2D6A4F] font-semibold mb-2 text-base">Quality Assurance</p>
+                    <span class="inline-block text-gray-600 text-sm bg-[#f0f7ea] px-4 py-1.5 rounded-full font-medium">10 years experience</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Contact Section -->
+<section id="contact" class="w-full py-16" style="background: transparent;">
+    <div class="max-w-6xl mx-auto px-4 md:px-8">
+        <div class="text-center mb-12">
+            <h2 style="font-family: 'Cormorant Garamond', serif; font-weight: 300; color: #f0ede8; font-size: 2.8rem; letter-spacing: 0.05em;">Get In Touch</h2>
+            <p style="color: #a89880;">We'd love to hear from you</p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-12 mt-8" style="background: rgba(10, 18, 12, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 20px; padding: 3rem; box-shadow: 0 40px 100px rgba(0,0,0,0.5), inset 0 1px 0 rgba(201,168,76,0.1);">
+            
+            <!-- Contact Info -->
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(201,168,76,0.15); border-radius: 16px; padding: 2rem;">
+                <h3 style="font-family: 'Cormorant Garamond', serif; color: #e8d5a3; font-size: 1.6rem; font-weight: 400; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(201,168,76,0.2);">Visit Our Showroom</h3>
+                
+                <div class="flex items-center gap-4 mb-6 transition-all hover:translate-x-1" style="color: #a89880;">
+                    <span style="min-width:40px; height:40px; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3); border-radius: 50%; display:flex; align-items:center; justify-content:center;">📍</span>
+                    <p style="color: #a89880; margin:0;">123 Gemstone Avenue, New York, NY 10001</p>
+                </div>
+                <div class="flex items-center gap-4 mb-6 transition-all hover:translate-x-1">
+                    <span style="min-width:40px; height:40px; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3); border-radius: 50%; display:flex; align-items:center; justify-content:center;">📞</span>
+                    <p style="color: #a89880; margin:0;">+1 (555) 123-4567</p>
+                </div>
+                <div class="flex items-center gap-4 mb-6 transition-all hover:translate-x-1">
+                    <span style="min-width:40px; height:40px; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3); border-radius: 50%; display:flex; align-items:center; justify-content:center;">✉️</span>
+                    <p style="color: #a89880; margin:0;">admingemz@gmail.com</p>
+                </div>
+                <div class="flex items-center gap-4 mb-6 transition-all hover:translate-x-1">
+                    <span style="min-width:40px; height:40px; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3); border-radius: 50%; display:flex; align-items:center; justify-content:center;">🕒</span>
+                    <p style="color: #a89880; margin:0;">Mon - Fri: 9:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+
+            <!-- Form / Login -->
+            {% if app.user %}
+                <form class="contact-form flex flex-col gap-4">
+                    <div>
+                        <label style="color: #a89880; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'Jost', sans-serif;">Name</label>
+                        <input type="text" name="name" value="{{ app.user.username }}" readonly
+                               style="width:100%; padding: 12px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; color: #f0ede8; margin-top: 6px; font-family: 'Jost', sans-serif;">
+                    </div>
+                    <div>
+                        <label style="color: #a89880; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'Jost', sans-serif;">Email</label>
+                        <input type="email" name="email" value="{{ app.user.email }}" readonly
+                               style="width:100%; padding: 12px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; color: #f0ede8; margin-top: 6px; font-family: 'Jost', sans-serif;">
+                    </div>
+                    <input type="text" name="subject" placeholder="Subject"
+                           style="width:100%; padding: 12px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; color: #f0ede8; font-family: 'Jost', sans-serif;" 
+                           onfocus="this.style.borderColor='#c9a84c'" onblur="this.style.borderColor='rgba(201,168,76,0.2)'">
+                    <textarea name="message" rows="4" placeholder="Your Message" required
+                              style="width:100%; padding: 12px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; color: #f0ede8; font-family: 'Jost', sans-serif; resize: vertical;"
+                              onfocus="this.style.borderColor='#c9a84c'" onblur="this.style.borderColor='rgba(201,168,76,0.2)'"></textarea>
+                    <button type="submit"
+                            style="width:100%; padding: 14px; background: transparent; border: 1px solid #c9a84c; border-radius: 10px; color: #c9a84c; font-family: 'Jost', sans-serif; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;"
+                            onmouseover="this.style.background='rgba(201,168,76,0.1)'; this.style.boxShadow='0 0 20px rgba(201,168,76,0.2)'"
+                            onmouseout="this.style.background='transparent'; this.style.boxShadow='none'">
+                        Send Message →
+                    </button>
+                </form>
+            {% else %}
+                <div class="text-center py-8">
+                    <svg class="w-16 h-16 mx-auto mb-4" style="color: rgba(201,168,76,0.4);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <p style="color: #a89880; margin-bottom: 1.5rem; font-family: 'Jost', sans-serif;">Please login to send us a message</p>
+                    <a href="{{ path('app_login') }}"
+                       style="display: inline-block; padding: 12px 32px; background: transparent; border: 1px solid #c9a84c; border-radius: 50px; color: #c9a84c; font-family: 'Jost', sans-serif; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.8rem; text-decoration: none; transition: all 0.3s ease;"
+                       onmouseover="this.style.background='rgba(201,168,76,0.1)'"
+                       onmouseout="this.style.background='transparent'">
+                        Login to Contact Us
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+
+<!-- Footer -->
+<footer class="w-full bg-[#014421] text-white text-center py-8">
+    <p>© {{ "now"|date("Y") }} Gemz Crystalline. All rights reserved.</p>
+    <p class="text-[#C8D8B8] text-sm mt-2">Timeless elegance for every occasion</p>
+</footer>
+
+<script>
+let showingAll = false;
+let totalProducts = 0;
+let currentCategory = 'all';
+
+window.onload = function() {
+    totalProducts = document.querySelectorAll('.product-card').length;
+    const totalCountElem = document.getElementById('total-count');
+    if (totalCountElem) totalCountElem.textContent = totalProducts;
+    initializeProductDisplay();
+}
+
+function initializeProductDisplay() {
+    const products = document.querySelectorAll('.product-card');
+    let visibleCount = 0;
+    
+    products.forEach((product, index) => {
+        if (index < 4) {
+            product.style.display = 'block';
+            visibleCount++;
+        } else {
+            product.style.display = 'none';
+        }
+    });
+    
+    document.getElementById('visible-count').textContent = visibleCount;
+    
+    const showMoreContainer = document.getElementById('show-more-container');
+    if (showMoreContainer) {
+        if (totalProducts <= 4) {
+            showMoreContainer.style.display = 'none';
+        } else {
+            showMoreContainer.style.display = 'block';
+        }
+    }
+}
+
+function filterProducts(category, event) {
+    currentCategory = category;
+    const products = document.querySelectorAll('.product-card');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    let categoryCount = 0;
+    
+    filterBtns.forEach(btn => {
+        btn.classList.remove('active', 'bg-[#014421]', 'text-white');
+        btn.classList.add('border-2', 'border-[#014421]', 'text-[#014421]');
+    });
+    
+    event.target.classList.add('active', 'bg-[#014421]', 'text-white');
+    event.target.classList.remove('border-2', 'border-[#014421]', 'text-[#014421]');
+    
+    products.forEach(product => {
+        const productCategories = product.dataset.category.split(' ');
+        if (category === 'all' || productCategories.includes(category)) {
+            categoryCount++;
+        }
+    });
+    
+    showingAll = false;
+    const btn = document.getElementById('show-more-btn');
+    if (btn) {
+        btn.innerHTML = '<span>Show More Products</span> <span class="text-xl">↓</span>';
+    }
+    
+    let shownInCategory = 0;
+    let visibleCount = 0;
+    
+    products.forEach(product => {
+        const productCategories = product.dataset.category.split(' ');
+        if (category === 'all' || productCategories.includes(category)) {
+            if (shownInCategory < 4) {
+                product.style.display = 'block';
+                visibleCount++;
+            } else {
+                product.style.display = 'none';
+            }
+            shownInCategory++;
+        } else {
+            product.style.display = 'none';
+        }
+    });
+    
+    document.getElementById('visible-count').textContent = visibleCount;
+    document.getElementById('total-count').textContent = categoryCount;
+    
+    const showMoreContainer = document.getElementById('show-more-container');
+    if (showMoreContainer) {
+        if (categoryCount <= 4) {
+            showMoreContainer.style.display = 'none';
+        } else {
+            showMoreContainer.style.display = 'block';
+        }
+    }
+}
+
+function toggleProducts() {
+    showingAll = !showingAll;
+    const btn = document.getElementById('show-more-btn');
+    if (btn) {
+        btn.innerHTML = showingAll ? '<span>Show Less</span> <span class="text-xl">↑</span>' : '<span>Show More Products</span> <span class="text-xl">↓</span>';
+    }
+    filterProductsWithCategory(currentCategory, showingAll);
+}
+
+function filterProductsWithCategory(category, showAll) {
+    const products = document.querySelectorAll('.product-card');
+    let visibleCount = 0;
+    let categoryCount = 0;
+    
+    products.forEach(product => {
+        const productCategories = product.dataset.category.split(' ');
+        if (category === 'all' || productCategories.includes(category)) {
+            categoryCount++;
+        }
+    });
+    
+    let shownInCategory = 0;
+    products.forEach(product => {
+        const productCategories = product.dataset.category.split(' ');
+        if (category === 'all' || productCategories.includes(category)) {
+            if (showAll || shownInCategory < 4) {
+                product.style.display = 'block';
+                visibleCount++;
+            } else {
+                product.style.display = 'none';
+            }
+            shownInCategory++;
+        } else {
+            product.style.display = 'none';
+        }
+    });
+    
+    document.getElementById('visible-count').textContent = visibleCount;
+    document.getElementById('total-count').textContent = categoryCount;
+    
+    const showMoreContainer = document.getElementById('show-more-container');
+    if (showMoreContainer) {
+        if (categoryCount <= 4) {
+            showMoreContainer.style.display = 'none';
+            showingAll = false;
+        } else {
+            showMoreContainer.style.display = 'block';
+        }
+    }
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+            targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            this.classList.add('active');
+        }
+    });
+});
+
+window.addEventListener('scroll', () => {
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    let current = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (window.scrollY >= (sectionTop - 200)) current = section.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.contact-form');
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = 'Sending...';
+            submitBtn.disabled = true;
+            
+            const formData = new FormData(this);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                subject: formData.get('subject') || 'No subject',
+                message: formData.get('message')
+            };
+            
+            if (!data.name || !data.email || !data.message) {
+                showFeedback('Please fill in all required fields.', 'error');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    showFeedback('✅ Message sent successfully!', 'success');
+                    this.reset();
+                } else {
+                    showFeedback('❌ Failed: ' + (result.error || 'Try again'), 'error');
+                }
+            } catch (err) {
+                showFeedback('❌ Network error. Check connection.', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    }
+});
+
+function showFeedback(message, type) {
+    const existing = document.querySelector('.contact-feedback');
+    if (existing) existing.remove();
+    const feedback = document.createElement('div');
+    feedback.className = `contact-feedback mt-4 p-3 rounded-lg text-center ${type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`;
+    feedback.innerHTML = message;
+    const form = document.querySelector('.contact-form');
+    if (form) form.parentNode.insertBefore(feedback, form.nextSibling);
+    setTimeout(() => {
+        feedback.style.opacity = '0';
+        setTimeout(() => feedback.remove(), 300);
+    }, 5000);
+}
+</script>
+</body>
+</html>

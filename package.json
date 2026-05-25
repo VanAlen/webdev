@@ -1,0 +1,26 @@
+{
+    "devDependencies": {
+        "@hotwired/stimulus": "^3.0.0",
+        "@hotwired/turbo": "^7.1.0 || ^8.0",
+        "@symfony/stimulus-bridge": "^3.2.0 || ^4.0.0",
+        "@symfony/ux-lazy-image": "file:vendor/symfony/ux-lazy-image/assets",
+        "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/assets",
+        "@symfony/webpack-encore": "^5.2.0",
+        "autoprefixer": "^10.4.27",
+        "baseline-browser-mapping": "^2.9.19",
+        "file-loader": "^6.2.0",
+        "postcss": "^8.5.8",
+        "postcss-cli": "^11.0.1",
+        "tailwindcss": "^3.4.19"
+    },
+    "dependencies": {
+        "core-js": "^3.45.1",
+        "postcss-loader": "^8.2.0",
+        "tailgrids": "^2.3.0"
+    },
+    "scripts": {
+        "dev": "npx encore dev",
+        "watch": "npx encore dev --watch",
+        "build": "npx encore production"
+    }
+}

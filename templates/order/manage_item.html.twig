@@ -1,0 +1,135 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Manage Items for Order #{{ order.id }}{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gray-50 py-16">
+  <div class="container mx-auto px-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-10">
+      <h1 class="text-3xl font-bold text-black">Manage Items for Order #{{ order.id }}</h1>
+      <a href="{{ path('app_order_show', {'id': order.id}) }}"
+         class="px-4 py-2 bg-gray-600 text-white rounded-lg shadow hover:bg-gray-700 transition">
+        Back to Order
+      </a>
+    </div>
+
+    <!-- Order Info -->
+    <div class="mb-8 p-6 bg-white shadow-md rounded-lg">
+      <h2 class="text-xl font-bold mb-4 text-gray-800">Order Details</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <p><strong>Status:</strong> <span class="capitalize">{{ order.status }}</span></p>
+        <p><strong>Amount:</strong> ${{ order.amount|number_format(2) }}</p>
+        <p><strong>Customer:</strong> {{ order.customer.username }}</p>
+        <p><strong>Total Items:</strong> {{ order.orderitems|length }}</p>
+      </div>
+    </div>
+
+    <!-- Pending Order Update Warning -->
+    {% if app.session.has('pending_order_update') and app.session.get('pending_order_update').order_id == order.id %}
+      <div class="mb-6 p-4 bg-yellow-50 border border-yellow-300 rounded">
+        <p class="text-sm text-gray-700">
+          <strong>⚠️ Note:</strong> You have unsaved order changes. These will be applied when you save any order item.
+        </p>
+        <div class="mt-2">
+          <a href="{{ path('app_order_edit', {'id': order.id}) }}"
+             class="text-sm text-blue-600 hover:text-blue-800 mr-4">
+            Edit Order Again
+          </a>
+          <form method="post" action="{{ path('app_order_apply_changes', {'id': order.id}) }}" class="inline">
+            <input type="hidden" name="_token" value="{{ csrf_token('apply_changes' ~ order.id) }}">
+            <button type="submit" class="text-sm text-green-600 hover:text-green-800">
+              Apply Changes Now
+            </button>
+          </form>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Items Management -->
+    <div class="bg-white shadow-xl rounded-xl p-8">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-black">Order Items</h2>
+        <a href="{{ path('app_orderitem_new', {'order_id': order.id}) }}"
+           class="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">
+          + Add New Item
+        </a>
+      </div>
+
+      {% if order.orderitems|length > 0 %}
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Item</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantity</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              {% for item in order.orderitems %}
+                <tr>
+                  <td class="px-4 py-3 text-sm text-gray-700">{{ item.id }}</td>
+                  <td class="px-4 py-3 text-sm text-gray-700">
+                    {% if item.gem %}<div>Gem: {{ item.gem.description }}</div>{% endif %}
+                    {% if item.jewelry %}<div>Jewelry: {{ item.jewelry.name }}</div>{% endif %}
+                    {% if item.gembundle %}<div>Bundle: {{ item.gembundle.name }}</div>{% endif %}
+                    {% if item.customjewelries %}<div>Custom: {{ item.customjewelries.name }}</div>{% endif %}
+                  </td>
+                  <td class="px-4 py-3 text-sm text-gray-700">{{ item.quantity }}</td>
+                  <td class="px-4 py-3 text-sm text-gray-700">${{ item.priceSnapshot|number_format(2) }}</td>
+                  <td class="px-4 py-3 text-sm text-gray-700">${{ (item.quantity * item.priceSnapshot)|number_format(2) }}</td>
+                  <td class="px-4 py-3 text-sm space-x-2">
+                    <a href="{{ path('app_orderitem_edit', {'id': item.id}) }}"
+                       class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs">
+                      Edit
+                    </a>
+                    <form method="post" action="{{ path('app_orderitem_delete', {'id': item.id}) }}" class="inline" onsubmit="return confirm('Delete this item?');">
+                      <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
+                      <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-xs">
+                        Delete
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot class="bg-gray-50">
+              <tr>
+                <td colspan="4" class="px-4 py-3 text-sm font-medium text-gray-700 text-right">Total:</td>
+                <td class="px-4 py-3 text-sm font-bold text-gray-900">
+                  ${{ order.orderitems|reduce((total, item) => total + (item.quantity * item.priceSnapshot), 0)|number_format(2) }}
+                </td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      {% else %}
+        <div class="text-center py-12">
+          <p class="text-gray-500 mb-4">No items in this order yet.</p>
+          <a href="{{ path('app_orderitem_new', {'order_id': order.id}) }}"
+             class="px-6 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">
+            Add First Item
+          </a>
+        </div>
+      {% endif %}
+
+      <!-- Navigation -->
+      <div class="mt-10 pt-6 border-t border-gray-200 flex justify-between">
+        <a href="{{ path('app_order_edit', {'id': order.id}) }}"
+           class="px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          ← Edit Order Details
+        </a>
+        <a href="{{ path('app_order_show', {'id': order.id}) }}"
+           class="px-5 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+          Finish and View Order →
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

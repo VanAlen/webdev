@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jewelry List{% endblock %}
+
+{% block body %}
+<style>
+    .icon-white { filter: brightness(0) invert(1); }
+    .table-container {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+    table th {
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        font-weight: 500;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    table td {
+        color: white;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    table tr:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+</style>
+
+<div class="min-h-screen p-6" style="background-color: #0a1f0a;">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-light text-white">Jewelries</h1>
+                <p class="text-sm text-white/50 mt-1">Manage your jewelry collection</p>
+            </div>
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_STAFF') %}
+                <a href="{{ path('app_jewelries_new') }}" class="px-4 py-2 bg-white/10 rounded-xl text-sm text-white hover:bg-white/20 transition border border-white/20 flex items-center gap-2">
+                    <img src="/images/svg/add_2.svg" class="w-5 h-5 icon-white opacity-70 hover:opacity-100" alt="Add">
+                    Add Jewelry
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">ID</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Name</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Gem Type</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Jewelry Type</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Stock</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Price</th>
+                            <th class="px-4 py-3 text-right text-xs font-medium text-white/60 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for jewelry in jewelries %}
+                        <tr class="hover:bg-white/5 transition">
+                            <td class="px-4 py-3 text-sm text-white/80">{{ jewelry.id }}</td>
+                            <td class="px-4 py-3 text-sm text-white">{{ jewelry.name }}</td>
+                            <td class="px-4 py-3 text-sm text-white/80">{{ jewelry.gemtype ? jewelry.gemtype.name : '—' }}</td>
+                            <td class="px-4 py-3 text-sm text-white/80">{{ jewelry.jewelrytype ? jewelry.jewelrytype.name : '—' }}</td>
+                            <td class="px-4 py-3">
+                                {% if jewelry.stock <= 5 and jewelry.stock > 0 %}
+                                    <span class="px-2 py-1 text-xs rounded-full bg-yellow-500/20 text-yellow-300">{{ jewelry.stock }}</span>
+                                {% elseif jewelry.stock == 0 %}
+                                    <span class="px-2 py-1 text-xs rounded-full bg-red-500/20 text-red-300">{{ jewelry.stock }}</span>
+                                {% else %}
+                                    <span class="text-sm text-white/80">{{ jewelry.stock }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-3 text-sm font-medium text-white">${{ jewelry.price|number_format(2) }}</td>
+                            <td class="px-4 py-3 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ path('app_jewelries_show', {'id': jewelry.id}) }}" class="p-1 rounded hover:bg-white/10 transition" title="View">
+                                        <img src="/images/svg/eye.svg" class="w-4 h-4 icon-white opacity-70 hover:opacity-100" alt="View">
+                                    </a>
+                                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_STAFF') %}
+                                        <a href="{{ path('app_jewelries_edit', {'id': jewelry.id}) }}" class="p-1 rounded hover:bg-white/10 transition" title="Edit">
+                                            <img src="/images/svg/edit_1.svg" class="w-4 h-4 icon-white opacity-70 hover:opacity-100" alt="Edit">
+                                        </a>
+                                        <form method="post" action="{{ path('app_jewelries_delete', {'id': jewelry.id}) }}" onsubmit="return confirm('Are you sure?');" class="inline">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jewelry.id) }}">
+                                            <button type="submit" class="p-1 rounded hover:bg-white/10 transition" title="Delete">
+                                                <img src="/images/svg/trash_4.svg" class="w-4 h-4 icon-white opacity-70 hover:opacity-100" alt="Delete">
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" class="px-4 py-8 text-center text-white/40">No jewelries found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

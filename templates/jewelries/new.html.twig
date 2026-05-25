@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Jewelry{% endblock %}
+
+{% block body %}
+<style>
+    .icon-white { filter: brightness(0) invert(1); }
+    .glass-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        transition: all 0.2s ease;
+    }
+    .glass-card:hover {
+        background: rgba(255, 255, 255, 0.12);
+    }
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 0.75rem;
+        color: white;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+    }
+    .form-input:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+    }
+    .form-input option {
+        background: #0a1f0a;
+    }
+    .form-label {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 0.5rem;
+    }
+    .section-divider {
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(255, 255, 255, 0.25);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 0.4rem;
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="min-h-screen p-6" style="background-color: #0a1f0a;">
+    <div class="max-w-4xl mx-auto">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-light text-white">Create New Jewelry</h1>
+                <p class="text-sm text-white/40 mt-1">Add a new jewelry piece to your collection</p>
+            </div>
+            <a href="{{ path('app_jewelries_index') }}" class="px-4 py-2 bg-white/10 rounded-xl text-sm text-white hover:bg-white/20 transition border border-white/20 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Back to List
+            </a>
+        </div>
+
+        <!-- Flash Messages -->
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-4 px-4 py-3 rounded-xl {{ label == 'success' ? 'bg-green-500/20 border border-green-500/30 text-green-300' : 'bg-red-500/20 border border-red-500/30 text-red-300' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <!-- Main Glass Card -->
+        <div class="glass-card p-6">
+            {{ form_start(form, { 'attr': { 'enctype': 'multipart/form-data', 'class': 'space-y-6' } }) }}
+
+            <!-- Basic Info Section -->
+            <div>
+                <p class="section-divider">Basic Information</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {{ form_row(form.name, {
+                        'label_attr': {'class': 'form-label'},
+                        'attr': {'class': 'form-input', 'placeholder': 'e.g. Emerald Ring'}
+                    }) }}
+                    
+                    <!-- Jewelry Type with Add Button -->
+                    <div>
+                        {{ form_label(form.jewelrytype, 'Jewelry Type', {'label_attr': {'class': 'form-label'}}) }}
+                        <div class="flex gap-2">
+                            {{ form_widget(form.jewelrytype, {'attr': {'class': 'form-input'}}) }}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('app_jewelrytype_new') }}" 
+                                   class="px-3 py-2 bg-white/10 rounded-lg text-white hover:bg-white/20 transition flex items-center gap-1 whitespace-nowrap">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                    <span class="text-xs">New Type</span>
+                                </a>
+                            {% endif %}
+                        </div>
+                        {{ form_errors(form.jewelrytype) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gem Type Section -->
+            <div>
+                <p class="section-divider">Gem Details</p>
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-5">
+                    {{ form_row(form.gemtype, {
+                        'label_attr': {'class': 'form-label'},
+                        'attr': {'class': 'form-input'}
+                    }) }}
+                </div>
+            </div>
+
+            <!-- Commerce Section -->
+            <div>
+                <p class="section-divider">Commerce</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    {{ form_row(form.price, {
+                        'label_attr': {'class': 'form-label'},
+                        'attr': {'class': 'form-input', 'placeholder': '0.00', 'step': '0.01'}
+                    }) }}
+                    {{ form_row(form.stock, {
+                        'label_attr': {'class': 'form-label'},
+                        'attr': {'class': 'form-input', 'placeholder': '0'}
+                    }) }}
+                    {{ form_row(form.image, {
+                        'label_attr': {'class': 'form-label'},
+                        'attr': {'class': 'form-input', 'accept': 'image/*'}
+                    }) }}
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-3 pt-4 mt-4 border-t border-white/10">
+                <button type="submit" class="px-5 py-2 bg-white/20 rounded-lg text-sm text-white hover:bg-white/30 transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Create Jewelry
+                </button>
+                <a href="{{ path('app_jewelries_index') }}" class="px-5 py-2 bg-white/10 rounded-lg text-sm text-white/70 hover:bg-white/20 transition">
+                    Cancel
+                </a>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

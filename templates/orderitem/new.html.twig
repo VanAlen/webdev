@@ -1,0 +1,178 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Order Item{% endblock %}
+
+{% block body %}
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+    }
+    .form-input {
+        width: 100%;
+        padding: 0.6rem 0.875rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 0.75rem;
+        color: white;
+    }
+    .form-input:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+    }
+    .form-label {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 0.35rem;
+    }
+    .product-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 0.75rem;
+        padding: 1rem;
+    }
+    body, div, p, span, label, h1, h2, h3, h4 {
+        color: white !important;
+    }
+    /* Make dropdown text white on dark background */
+.form-input option {
+    background-color: #0a1f0a;
+    color: white;
+}
+
+/* For native select dropdown */
+select.form-input {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+select.form-input option {
+    background-color: #1a2a1a;
+    color: white;
+}
+
+/* For dropdown when expanded (Webkit browsers) */
+select.form-input:-webkit-autofill,
+select.form-input:-webkit-autofill:hover,
+select.form-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px #1a2a1a inset;
+}
+</style>
+
+<div class="min-h-screen p-6" style="background-color: #0a1f0a;">
+    <div class="max-w-6xl mx-auto">
+
+        <!-- Simple Header with null checks -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-light text-white">Add Items</h1>
+                {% if order and order.id %}
+                    <p class="text-sm text-white/40">Order #{{ order.id }} • {{ order.customer.username|default('Customer') }}</p>
+                {% else %}
+                    <p class="text-sm text-white/40">No order selected</p>
+                {% endif %}
+            </div>
+
+                <a href="{{ path('app_order_new', {'id': order.id}) }}" class="px-4 py-2 bg-white/10 rounded-xl text-sm text-white hover:bg-white/20 transition">
+                    Back to Order
+                </a>
+
+        </div>
+
+        <!-- Simple Info -->
+        <div class="glass-card p-3 mb-6">
+            <p class="text-sm text-white/60 text-center">Select products below. Multiple selections allowed.</p>
+        </div>
+
+        <!-- Form -->
+        <div class="glass-card p-6">
+            {{ form_start(form) }}
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                
+                <!-- Gem -->
+                <div class="product-card">
+                    <h4 class="text-white font-medium mb-3">💎 Gem</h4>
+                    {{ form_label(form.gem, '', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.gem, {'attr': {'class': 'form-input gem-select'}}) }}
+                    <div class="gem-quantity-container hidden mt-3">
+                        {{ form_label(form.gem_quantity, 'Quantity', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.gem_quantity, {'attr': {'class': 'form-input', 'min': '1', 'value': '1'}}) }}
+                    </div>
+                </div>
+
+                <!-- Jewelry -->
+                <div class="product-card">
+                    <h4 class="text-white font-medium mb-3">💍 Jewelry</h4>
+                    {{ form_label(form.jewelry, '', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.jewelry, {'attr': {'class': 'form-input jewelry-select'}}) }}
+                    <div class="jewelry-quantity-container hidden mt-3">
+                        {{ form_label(form.jewelry_quantity, 'Quantity', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.jewelry_quantity, {'attr': {'class': 'form-input', 'min': '1', 'value': '1'}}) }}
+                    </div>
+                </div>
+
+                <!-- Bundle -->
+                <div class="product-card">
+                    <h4 class="text-white font-medium mb-3">📦 Bundle</h4>
+                    {{ form_label(form.gembundle, '', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.gembundle, {'attr': {'class': 'form-input bundle-select'}}) }}
+                    <div class="bundle-quantity-container hidden mt-3">
+                        {{ form_label(form.bundle_quantity, 'Quantity', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.bundle_quantity, {'attr': {'class': 'form-input', 'min': '1', 'value': '1'}}) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex gap-3 mt-6 pt-4 border-t border-white/10">
+                <button type="submit" class="flex-1 px-5 py-2 bg-white/20 rounded-lg text-white hover:bg-white/30 transition">
+                    + Add Selected Items
+                </button>
+                {% if order and order.id %}
+                    <a href="{{ path('app_order_show', {'id': order.id}) }}" class="px-5 py-2 bg-white/10 rounded-lg text-white/70 hover:bg-white/20 transition">
+                        Cancel
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_order_index') }}" class="px-5 py-2 bg-white/10 rounded-lg text-white/70 hover:bg-white/20 transition">
+                        Cancel
+                    </a>
+                {% endif %}
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function setupProduct(selectId, containerClass) {
+        const select = document.querySelector(selectId);
+        if (!select) return;
+        
+        const container = document.querySelector(containerClass);
+        
+        select.addEventListener('change', function() {
+            if (this.value) {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+            }
+        });
+    }
+    
+    setupProduct('#{{ form.gem.vars.id }}', '.gem-quantity-container');
+    setupProduct('#{{ form.jewelry.vars.id }}', '.jewelry-quantity-container');
+    setupProduct('#{{ form.gembundle.vars.id }}', '.bundle-quantity-container');
+});
+</script>
+{% endblock %}

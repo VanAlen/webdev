@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Orderitem index{% endblock %}
+
+{% block body %}
+    <h1>Orderitem index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Orderid</th>
+                <th>Quantity</th>
+                <th>Jewelry_id</th>
+                <th>Customjewelry_id</th>
+                <th>Gembundle_id</th>
+                <th>Gem_id</th>
+                <th>Price_snapshot</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for orderitem in orderitems %}
+            <tr>
+                <td>{{ orderitem.id }}</td>
+                <td>{{ orderitem.orderid }}</td>
+                <td>{{ orderitem.quantity }}</td>
+                <td>{{ orderitem.jewelryId }}</td>
+                <td>{{ orderitem.customjewelryId }}</td>
+                <td>{{ orderitem.gembundleId }}</td>
+                <td>{{ orderitem.gemId }}</td>
+                <td>{{ orderitem.priceSnapshot }}</td>
+                <td>
+                    <a href="{{ path('app_orderitem_show', {'id': orderitem.id}) }}">show</a>
+                    <a href="{{ path('app_orderitem_edit', {'id': orderitem.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_orderitem_new') }}">Create new</a>
+{% endblock %}

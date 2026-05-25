@@ -1,0 +1,12 @@
+# config/routes.yaml
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+###> lexik/jwt-authentication-bundle ###s
+api_login:
+    path: /api/login
+    methods: POST
+###< lexik/jwt-authentication-bundle ###

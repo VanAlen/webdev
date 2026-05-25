@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Manage Jewelry Types{% endblock %}
+
+{% block body %}
+<div class="min-h-screen p-6" style="background-color: #0a1f0a;">
+    <div class="max-w-2xl mx-auto">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-2xl text-white">Manage Jewelry Types</h1>
+                <p class="text-white/40 text-sm">Add, edit, or remove jewelry types</p>
+            </div>
+            <a href="{{ path('app_jewelrytype_new') }}" class="px-4 py-2 bg-white/20 rounded-lg text-white hover:bg-white/30 transition">
+                + New Jewelry Type
+            </a>
+        </div>
+        
+        <div class="glass-card p-6">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-white/10">
+                        <th class="text-left py-3 text-white/60">ID</th>
+                        <th class="text-left py-3 text-white/60">Name</th>
+                        <th class="text-right py-3 text-white/60">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for type in jewelrytypes %}
+                    <tr class="border-b border-white/5">
+                        <td class="py-3 text-white/40">{{ type.id }}</td>
+                        <td class="py-3 text-white">{{ type.name }}</td>
+                        <td class="py-3 text-right">
+                            <a href="{{ path('app_jewelrytype_edit', {'id': type.id}) }}" class="text-yellow-400 hover:text-yellow-300 mr-3">Edit</a>
+                            <form method="post" action="{{ path('app_jewelrytype_delete', {'id': type.id}) }}" class="inline" onsubmit="return confirm('Delete {{ type.name }}?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ type.id) }}">
+                                <button type="submit" class="text-red-400 hover:text-red-300">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+    }
+</style>
+{% endblock %}

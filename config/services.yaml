@@ -1,0 +1,44 @@
+# config/services.yaml
+
+# Add this parameters section at the top
+parameters:
+    gems_directory: '%kernel.project_dir%/public/images/gems'
+    jewelry_images_directory: '%kernel.project_dir%/public/images/jewelries'
+    bundles_images_directory: '%kernel.project_dir%/public/images/bundles'  
+    uploads_directory: '%kernel.project_dir%/public/images/custom'
+    svg_directory: '%kernel.project_dir%/public/images/svg'
+
+# Your existing services section starts here
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/*'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    # ADD THIS EXPLICIT SERVICE DEFINITION
+    App\Security\GoogleAuthenticator:
+        public: true  # <-- ADD THIS
+        tags:
+            - { name: 'security.authenticator' }
+
+    App\Service\ActivityLogger:
+        public: true
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+            $tokenStorage: '@security.token_storage'
+
+    App\Service\EntityLoggerService:
+        arguments:
+            $activityLogger: '@App\Service\ActivityLogger'
+
+    # ADD THIS SESSION LISTENER:
+    App\EventListener\SessionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 1024 }

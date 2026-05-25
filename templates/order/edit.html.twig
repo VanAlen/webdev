@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Order #{{ order.id }}{% endblock %}
+
+{% block body %}
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+    }
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 0.75rem;
+        color: white;
+    }
+    .form-input:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+    }
+    .form-label {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 0.5rem;
+    }
+    body, div, p, span, label, h1, h2, h3 {
+        color: white !important;
+    }
+</style>
+
+<div class="min-h-screen p-6" style="background-color: #0a1f0a;">
+    <div class="max-w-md mx-auto">
+
+        <div class="mb-6">
+            <h1 class="text-2xl font-light text-white">Edit Order #{{ order.id }}</h1>
+            <p class="text-sm text-white/40 mt-1">Update order status</p>
+        </div>
+
+        <div class="glass-card p-6">
+            {{ form_start(form) }}
+
+            {{ form_row(form.status, {
+                'label_attr': {'class': 'form-label'},
+                'attr': {'class': 'form-input'}
+            }) }}
+
+            <!-- amount is hidden – automatically recalculated -->
+            {{ form_widget(form.amount) }}
+
+            <div class="flex gap-3 mt-6 pt-4 border-t border-white/10">
+                <button type="submit" class="flex-1 px-5 py-2 bg-white/20 rounded-lg text-white hover:bg-white/30 transition">
+                    Save Changes
+                </button>
+                <a href="{{ path('app_order_show', {'id': order.id}) }}" class="px-5 py-2 bg-white/10 rounded-lg text-white/70 hover:bg-white/20 transition">
+                    Cancel
+                </a>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
